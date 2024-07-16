@@ -322,7 +322,7 @@ return [
         //     'label' => 4,
         //     'label_color' => 'success',
         // ],
-        ['header' => 'account_settings'],
+        ['header' => 'Confirguración'],
         [
             'text' => 'profile',
             'url' => 'profile',
@@ -334,50 +334,17 @@ return [
             'url' => 'productos',
             'icon' => 'fas fa-fw fa-share',
         ],
-        // [
-        //     'text' => 'multilevel',
-        //     'icon' => 'fas fa-fw fa-share',
-        //     'submenu' => [
-        //         [
-        //             'text' => 'level_one',
-        //             'url' => '#',
-        //         ],
-        //         [
-        //             'text' => 'level_one',
-        //             'url' => '#',
-        //             'submenu' => [
-        //                 [
-        //                     'text' => 'level_two',
-        //                     'url' => '#',
-        //                 ],
-        //                 [
-        //                     'text' => 'level_two',
-        //                     'url' => '#',
-        //                     'submenu' => [
-        //                         [
-        //                             'text' => 'level_three',
-        //                             'url' => '#',
-        //                         ],
-        //                         [
-        //                             'text' => 'level_three',
-        //                             'url' => '#',
-        //                         ],
-        //                     ],
-        //                 ],
-        //             ],
-        //         ],
-        //         [
-        //             'text' => 'level_one',
-        //             'url' => '#',
-        //         ],
-        //     ],
-        // ],
-        // ['header' => 'labels'],
-        // [
-        //     'text' => 'important',
-        //     'icon_color' => 'red',
-        //     'url' => '#',
-        // ],
+        ['header' => 'Usuarios'],
+        [
+            'text' => 'Roles',
+            'url' => 'productos',
+            'icon' => 'fas fa-fw fa-sitemap',
+        ],
+        [
+            'text' => 'Permisos',
+            'url' => 'productos',
+            'icon' => 'fas fa-fw fa-key',
+        ],
     ],
 
     /*
