@@ -337,12 +337,12 @@ return [
         ['header' => 'Usuarios'],
         [
             'text' => 'Roles',
-            'url' => 'productos',
+            'route' => 'roles.index',
             'icon' => 'fas fa-fw fa-sitemap',
         ],
         [
             'text' => 'Permisos',
-            'url' => 'productos',
+            'route' => 'permisos.index',
             'icon' => 'fas fa-fw fa-key',
         ],
     ],

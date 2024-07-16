@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\RolController;
+use App\Http\Controllers\PermisoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,4 +31,6 @@ Route::middleware([
     })->name('dashboard');
     Route::get('/profile',[ProfileController::class, 'index'])->name('profile');
     Route::resource('/productos', ProductoController::class)->names('productos');
+    Route::resource('/roles', RolController::class)->names('roles');
+    Route::resource('/permisos', PermisoController::class)->names('permisos');
 });
