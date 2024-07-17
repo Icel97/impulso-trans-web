@@ -336,6 +336,11 @@ return [
         ],
         ['header' => 'Usuarios'],
         [
+            'text' => 'Usuarios',
+            'route' => 'usuarios.index',
+            'icon' => 'fas fa-fw fa-users',
+        ],
+        [
             'text' => 'Roles',
             'route' => 'roles.index',
             'icon' => 'fas fa-fw fa-sitemap',

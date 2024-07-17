@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\PermisoController;
+use App\Http\Controllers\AsignarController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,4 +34,10 @@ Route::middleware([
     Route::resource('/productos', ProductoController::class)->names('productos');
     Route::resource('/roles', RolController::class)->names('roles');
     Route::resource('/permisos', PermisoController::class)->names('permisos');
+    Route::resource('/usuarios', AsignarController::class)->names('usuarios');
+
+    // Agregar la ruta específica para roles.permisos
+    Route::get('/roles/{role}/permisos', [RolController::class, 'permisos'])->name('roles.permisos');
+    // Agregar la ruta específica para roles.permisos.asignarPermisos
+    Route::put('/roles/{role}/asignarPermisos', [RolController::class, 'asignarPermisos'])->name('roles.asignarPermisos');
 });
