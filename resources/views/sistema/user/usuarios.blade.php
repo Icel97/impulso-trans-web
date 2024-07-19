@@ -5,7 +5,10 @@
 @section('content_header')
     <div class="d-flex justify-content-between">
         <h1>Usuarios</h1>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newUsuarioModal"><i class="fa fa-plus" aria-hidden="true"></i> Usuario</button>
+                            
+        @can('Crear Usuario')
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newUsuarioModal"><i class="fa fa-plus" aria-hidden="true"></i> Usuario</button>
+        @endcan
     </div>
 @stop
 
@@ -24,13 +27,13 @@
     <div id="content">
         <div class="card">
             <div class="card-body">
-                @if (session('success') == 'Usuario guardado')
-                    <x-adminlte-alert theme="success" title="Usuario guardado" id="success-alert">
-                        Usuario guardado correctamente.
+                @if (session('success') == 'Usuario creado')
+                    <x-adminlte-alert theme="success" title="Usuario creado" id="success-alert">
+                        Usuario creado correctamente.
                     </x-adminlte-alert>
-                @elseif (session('success') == 'Producto eliminado')
-                    <x-adminlte-alert theme="success" title="Producto eliminado" id="success-alert">
-                        Producto eliminado correctamente.
+                @elseif (session('success') == 'Usuario eliminado')
+                    <x-adminlte-alert theme="success" title="Usuario eliminado" id="success-alert">
+                        Usuario eliminado correctamente.
                     </x-adminlte-alert>
                 @elseif (session('success') == 'Usuario actualizado')
                     <x-adminlte-alert theme="success" title="Usuario actualizado" id="success-alert">
@@ -38,7 +41,7 @@
                     </x-adminlte-alert>
                 @elseif (session('error'))
                     <x-adminlte-alert theme="danger" title="Error" id="error-alert">
-                        Error al guardar el producto.
+                        Error al guardar el Usuario.
                     </x-adminlte-alert>
                 @endif
 
@@ -46,6 +49,7 @@
                     $heads = [
                         'ID',
                         'Nombre',
+                        'Email',
                         ['label' => 'Actions', 'no-export' => true, 'width' => 15],
                     ];
 
@@ -61,31 +65,31 @@
                     ];
                 @endphp
 
-                <x-adminlte-datatable id="table1" :heads="$heads" :config="$config">
-                    @foreach($usuarios as $usuario)
-                        <tr>
-                            <td>{{ $usuario->id }}</td>
-                            <td>{{ $usuario->name }}</td>
-                            <td>
-                                <!-- editar nombre -->
-                                <button class="btn btn-xs btn-default text-primary mx-1 shadow edit-button" data-id="{{ $usuario->id }}" title="Edit">
-                                    <i class="fa fa-lg fa-fw fa-pen"></i>
-                                </button>
-                                <!-- asignar permisos -->
-                                <a href="{{ route('usuarios.edit', $usuario->id) }}" class="btn btn-xs btn-default text-success mx-1 shadow" title="Permisos">
-                                    <i class="fa fa-lg fa-fw fa-key"></i>
-                                </a>
-                                <!-- eliminar Usuario -->
-                                <form style="display: inline" action="{{ route('usuarios.destroy', $usuario->id) }}" method="post" class="formEliminar">
-                                    @csrf
-                                    @method('DELETE')
-                                    {!! $btnDelete !!}
-                                </form>
-                            </td>
-                        </tr>
-                    @endforeach
-                </x-adminlte-datatable>
-
+                    <x-adminlte-datatable id="table1" :heads="$heads" :config="$config">
+                        @foreach($usuarios as $usuario)
+                            <tr>
+                                <td>{{ $usuario->id }}</td>
+                                <td>{{ $usuario->name }}</td>
+                                <td>{{ $usuario->email }}</td>
+                                <td>
+                                    <!-- editar nombre -->
+                                    <button class="btn btn-xs btn-default text-primary mx-1 shadow edit-button" data-id="{{ $usuario->id }}" title="Edit">
+                                        <i class="fa fa-lg fa-fw fa-pen"></i>
+                                    </button>
+                                    <!-- asignar permisos -->
+                                    <a href="{{ route('usuarios.edit', $usuario->id) }}" class="btn btn-xs btn-default text-success mx-1 shadow" title="Permisos">
+                                        <i class="fa fa-lg fa-fw fa-key"></i>
+                                    </a>
+                                    <!-- eliminar Usuario -->
+                                    <form style="display: inline" action="{{ route('usuarios.destroy', $usuario->id) }}" method="post" class="formEliminar">
+                                        @csrf
+                                        @method('DELETE')
+                                        {!! $btnDelete !!}
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </x-adminlte-datatable>
             </div>
         </div>
 
@@ -121,7 +125,21 @@
                             @endif
                             <form id="productForm" action="{{ route('usuarios.store') }}" method="post">
                                 @csrf
-                                <x-adminlte-input type="text" name="nombre" label="Nombre" placeholder="nuevo Usuario" label-class="text-lightblue" value="{{ old('nombre') }}">
+                                <x-adminlte-input type="text" name="nombre" label="Nombre" placeholder="nombre" label-class="text-lightblue" value="{{ old('nombre') }}">
+                                    <x-slot name="prependSlot">
+                                        <div class="input-group-text">
+                                            <i class="fas fa-cube text-lightblue"></i>
+                                        </div>
+                                    </x-slot>
+                                </x-adminlte-input>
+                                <x-adminlte-input type="email" name="email" label="Email" placeholder="Email" label-class="text-lightblue" value="{{ old('email') }}">
+                                    <x-slot name="prependSlot">
+                                        <div class="input-group-text">
+                                            <i class="fas fa-cube text-lightblue"></i>
+                                        </div>
+                                    </x-slot>
+                                </x-adminlte-input>
+                                <x-adminlte-input type="password" name="password" label="Contraseña" placeholder="Contraseña" label-class="text-lightblue">
                                     <x-slot name="prependSlot">
                                         <div class="input-group-text">
                                             <i class="fas fa-cube text-lightblue"></i>

@@ -3,7 +3,10 @@
 @section('title', 'Usuarios y Roles')
 
 @section('content_header')
-    <h1>Usuarios y Roles</h1>
+    <div class="d-flex justify-content-start">
+        <a href="{{ route('usuarios.index') }}" class="btn btn-default mx-2"><i class="fas fa-arrow-left"></i></a>
+        <h1>Usuarios y Roles</h1>
+    </div>
 @stop
 
 @section('content')

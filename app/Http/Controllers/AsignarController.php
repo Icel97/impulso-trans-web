@@ -31,7 +31,13 @@ class AsignarController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // crear usuario 
+        $usuario = new User();
+        $usuario->name = $request->nombre;
+        $usuario->email = $request->email;
+        $usuario->password = bcrypt($request->password);
+        $usuario->save();
+        return redirect()->route('usuarios.index')->with('success', 'Usuario creado');
     }
 
     /**
