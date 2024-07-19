@@ -173,10 +173,6 @@
                 $('#content').show();
             });
 
-            @if ($errors->any())
-                $('#newUsuarioModal').modal('show');
-            @endif
-
             // Hide alerts after 5 seconds
             setTimeout(function() {
                 $('#success-alert').fadeOut('slow');
@@ -230,4 +226,11 @@
             });
         });
     </script>
+     @if ($errors->any())
+        <script>
+            $(document).ready(function() {
+                $('#newUsuarioModal').modal('show');
+            });
+        </script>
+    @endif
 @stop
