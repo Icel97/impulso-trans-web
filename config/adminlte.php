@@ -334,6 +334,11 @@ return [
             'url' => 'productos',
             'icon' => 'fas fa-fw fa-share',
         ],
+        [
+            'text' => 'Pagos',
+            'url' => 'pagos',
+            'icon' => 'fas fa-fw fa-file-invoice-dollar',
+        ],
         ['header' => 'Usuarios'],
         [
             'text' => 'Roles',
