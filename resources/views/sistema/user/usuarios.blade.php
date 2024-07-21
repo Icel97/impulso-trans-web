@@ -1,11 +1,14 @@
 @extends('adminlte::page')
 
-@section('title', 'Roles')
+@section('title', 'Usuarios')
 
 @section('content_header')
     <div class="d-flex justify-content-between">
-        <h1>Roles</h1>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newRolModal"><i class="fa fa-plus" aria-hidden="true"></i> Rol</button>
+        <h1>Usuarios</h1>
+                            
+        @can('Crear Usuario')
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newUsuarioModal"><i class="fa fa-plus" aria-hidden="true"></i> Usuario</button>
+        @endcan
     </div>
 @stop
 
@@ -24,21 +27,21 @@
     <div id="content">
         <div class="card">
             <div class="card-body">
-                @if (session('success') == 'Rol guardado')
-                    <x-adminlte-alert theme="success" title="Rol guardado" id="success-alert">
-                        Rol guardado correctamente.
+                @if (session('success') == 'Usuario creado')
+                    <x-adminlte-alert theme="success" title="Usuario creado" id="success-alert">
+                        Usuario creado correctamente.
                     </x-adminlte-alert>
-                @elseif (session('success') == 'Producto eliminado')
-                    <x-adminlte-alert theme="success" title="Producto eliminado" id="success-alert">
-                        Producto eliminado correctamente.
+                @elseif (session('success') == 'Usuario eliminado')
+                    <x-adminlte-alert theme="success" title="Usuario eliminado" id="success-alert">
+                        Usuario eliminado correctamente.
                     </x-adminlte-alert>
-                @elseif (session('success') == 'Rol actualizado')
-                    <x-adminlte-alert theme="success" title="Rol actualizado" id="success-alert">
-                        Rol actualizado correctamente.
+                @elseif (session('success') == 'Usuario actualizado')
+                    <x-adminlte-alert theme="success" title="Usuario actualizado" id="success-alert">
+                        Usuario actualizado correctamente.
                     </x-adminlte-alert>
                 @elseif (session('error'))
                     <x-adminlte-alert theme="danger" title="Error" id="error-alert">
-                        Error al guardar el producto.
+                        Error al guardar el Usuario.
                     </x-adminlte-alert>
                 @endif
 
@@ -46,6 +49,7 @@
                     $heads = [
                         'ID',
                         'Nombre',
+                        'Email',
                         ['label' => 'Actions', 'no-export' => true, 'width' => 15],
                     ];
 
@@ -61,39 +65,39 @@
                     ];
                 @endphp
 
-                <x-adminlte-datatable id="table1" :heads="$heads" :config="$config">
-                    @foreach($roles as $rol)
-                        <tr>
-                            <td>{{ $rol->id }}</td>
-                            <td>{{ $rol->name }}</td>
-                            <td>
-                                <!-- editar nombre -->
-                                <button class="btn btn-xs btn-default text-primary mx-1 shadow edit-button" data-id="{{ $rol->id }}" title="Edit">
-                                    <i class="fa fa-lg fa-fw fa-pen"></i>
-                                </button>
-                                <!-- asignar permisos -->
-                                <a href="{{ route('roles.permisos', $rol->id) }}" class="btn btn-xs btn-default text-success mx-1 shadow" title="Permisos">
-                                    <i class="fa fa-lg fa-fw fa-key"></i>
-                                </a>
-                                <!-- eliminar rol -->
-                                <form style="display: inline" action="{{ route('roles.destroy', $rol->id) }}" method="post" class="formEliminar">
-                                    @csrf
-                                    @method('DELETE')
-                                    {!! $btnDelete !!}
-                                </form>
-                            </td>
-                        </tr>
-                    @endforeach
-                </x-adminlte-datatable>
-
+                    <x-adminlte-datatable id="table1" :heads="$heads" :config="$config">
+                        @foreach($usuarios as $usuario)
+                            <tr>
+                                <td>{{ $usuario->id }}</td>
+                                <td>{{ $usuario->name }}</td>
+                                <td>{{ $usuario->email }}</td>
+                                <td>
+                                    <!-- editar nombre -->
+                                    <button class="btn btn-xs btn-default text-primary mx-1 shadow edit-button" data-id="{{ $usuario->id }}" title="Edit">
+                                        <i class="fa fa-lg fa-fw fa-pen"></i>
+                                    </button>
+                                    <!-- asignar permisos -->
+                                    <a href="{{ route('usuarios.edit', $usuario->id) }}" class="btn btn-xs btn-default text-success mx-1 shadow" title="Permisos">
+                                        <i class="fa fa-lg fa-fw fa-key"></i>
+                                    </a>
+                                    <!-- eliminar Usuario -->
+                                    <form style="display: inline" action="{{ route('usuarios.destroy', $usuario->id) }}" method="post" class="formEliminar">
+                                        @csrf
+                                        @method('DELETE')
+                                        {!! $btnDelete !!}
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </x-adminlte-datatable>
             </div>
         </div>
 
-        <div class="modal fade" id="newRolModal" tabindex="-1" role="dialog" aria-labelledby="newRolModalLabel" aria-hidden="true">
+        <div class="modal fade" id="newUsuarioModal" tabindex="-1" role="dialog" aria-labelledby="newUsuarioModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="newRolModalLabel">Nuevo Rol</h5>
+                        <h5 class="modal-title" id="newUsuarioModalLabel">Nuevo Usuario</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -119,9 +123,23 @@
                                     </ul>
                                 </div>
                             @endif
-                            <form id="productForm" action="{{ route('roles.store') }}" method="post">
+                            <form id="productForm" action="{{ route('usuarios.store') }}" method="post">
                                 @csrf
-                                <x-adminlte-input type="text" name="nombre" label="Nombre" placeholder="nuevo rol" label-class="text-lightblue" value="{{ old('nombre') }}">
+                                <x-adminlte-input type="text" name="nombre" label="Nombre" placeholder="nombre" label-class="text-lightblue" value="{{ old('nombre') }}">
+                                    <x-slot name="prependSlot">
+                                        <div class="input-group-text">
+                                            <i class="fas fa-cube text-lightblue"></i>
+                                        </div>
+                                    </x-slot>
+                                </x-adminlte-input>
+                                <x-adminlte-input type="email" name="email" label="Email" placeholder="Email" label-class="text-lightblue" value="{{ old('email') }}">
+                                    <x-slot name="prependSlot">
+                                        <div class="input-group-text">
+                                            <i class="fas fa-cube text-lightblue"></i>
+                                        </div>
+                                    </x-slot>
+                                </x-adminlte-input>
+                                <x-adminlte-input type="password" name="password" label="Contraseña" placeholder="Contraseña" label-class="text-lightblue">
                                     <x-slot name="prependSlot">
                                         <div class="input-group-text">
                                             <i class="fas fa-cube text-lightblue"></i>
@@ -154,10 +172,6 @@
                 $('#loading').hide();
                 $('#content').show();
             });
-
-            @if ($errors->any())
-                $('#newRolModal').modal('show');
-            @endif
 
             // Hide alerts after 5 seconds
             setTimeout(function() {
@@ -197,19 +211,26 @@
                 $('#form-loading').css('display', 'flex');
                 $('#form-content').hide();
                 $.ajax({
-                    url: '/roles/' + id + '/edit',
+                    url: '/usuarios/' + id + '/edit',
                     method: 'GET',
                     success: function(data) {
                         $('#form-loading').hide();
                         $('#form-content').show();
-                        $('#newRolModalLabel').text('Editar Rol');
-                        $('#productForm').attr('action', '/roles/' + id);
+                        $('#newUsuarioModalLabel').text('Editar Usuario');
+                        $('#productForm').attr('action', '/usuarios/' + id);
                         $('#productForm').append('@method("PUT")');
                         $('input[name="nombre"]').val(data.name);
-                        $('#newRolModal').modal('show');
+                        $('#newUsuarioModal').modal('show');
                     }
                 });
             });
         });
     </script>
+     @if ($errors->any())
+        <script>
+            $(document).ready(function() {
+                $('#newUsuarioModal').modal('show');
+            });
+        </script>
+    @endif
 @stop

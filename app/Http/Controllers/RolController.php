@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Spatie\Permission\Models\Role;
 
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Permission;
 
 class RolController extends Controller
 {
@@ -14,7 +15,9 @@ class RolController extends Controller
     {
         //llamart vista enviar roles
         $roles = Role::all();
-        return view('sistema.user.roles', compact('roles'));
+        $permisos = Permission::all();
+
+        return view('sistema.user.roles', compact('roles', 'permisos'));
 
     }
 
@@ -41,7 +44,8 @@ class RolController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $role = Role::find($id);
+        return response()->json($role);
     }
 
     /**
@@ -49,7 +53,16 @@ class RolController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        //actualizar nombre
+        $request->validate([
+            'nombre' => 'required|string',
+        ]);
+
+        $role = Role::find($id);
+        $role->name = $request->input('nombre');
+        $role->save();
+
+        return redirect()->route('roles.index')->with('success', 'Rol actualizado');
     }
 
     /**
@@ -59,4 +72,24 @@ class RolController extends Controller
     {
         //
     }
+
+    /**
+     * mostrar permisos para asignar a un rol
+     */
+    public function permisos(Role $role)
+    {
+        $permisos = Permission::all();
+        return view('sistema.user.rolPermiso', compact('role', 'permisos'));
+    }
+
+    /**
+     * asignar permisos a un rol
+     */
+    public function asignarPermisos(Request $request, Role $role)
+    {
+        $role->permissions()->sync($request->permisos);
+        return redirect()->route('roles.permisos', $role)->with('success', 'Permisos asignados');
+    }
+
+
 }
