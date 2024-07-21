@@ -64,7 +64,7 @@ class PagoController extends Controller
         $userId = $user->id; 
         #create hash of 5 characters based on user id 
         $fileName = $date . '_' . $userId . "_pago." . $request->file('comprobante_url')->extension(); 
-        $filePath = $request->file('comprobante_url')->storeAs('public/pagos/' . date('Y') . '/' . date('m'), $fileName);
+        $filePath = $request->file('comprobante_url')->storeAs('public/pagos/' . date('Y') . '/' . $fileName);
 
         $file_path_raw =  $date . '_' . $userId . "_pago."; # no extension 
         $pago = Pago::where('comprobante_url', 'like', '%' . $file_path_raw . '%')->first(); 

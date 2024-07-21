@@ -4,8 +4,8 @@
 
 @section('content_header')
     <div class="d-flex justify-content-between">
-        <h1>Pagos</h1>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newProductModal">Nuevo Producto</button>
+        <h1>Suscripciones</h1>
+
     </div>
 @stop
 
@@ -26,16 +26,16 @@
             <div class="card-title">
                 <ul class="nav nav-tabs">
                     <li class="nav-item">
-                        <a class="nav-link {{ $filter === 'all' ? 'active' : '' }}" href="{{ route('pagos.index', ['filter' => 'all']) }}">Todos</a>
+                        <a class="nav-link {{ $filter === 'all' ? 'active' : '' }}" href="{{ route('suscripciones.index', ['filter' => 'all']) }}">Todos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ $filter === 'pending' ? 'active' : '' }}" href="{{ route('pagos.index', ['filter' => 'pending']) }}">Pendientes</a>
+                        <a class="nav-link {{ $filter === 'pending' ? 'active' : '' }}" href="{{ route('suscripciones.index', ['filter' => 'active']) }}">Activas</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ $filter === 'approved' ? 'active' : '' }}" href="{{ route('pagos.index', ['filter' => 'approved']) }}">Aprobados</a>
+                        <a class="nav-link {{ $filter === 'approved' ? 'active' : '' }}" href="{{ route('suscripciones.index', ['filter' => 'inactive']) }}">Inactivas</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ $filter === 'rejected' ? 'active' : '' }}" href="{{ route('pagos.index', ['filter' => 'rejected']) }}">Rechazados</a>
+                        <a class="nav-link {{ $filter === 'rejected' ? 'active' : '' }}" href="{{ route('suscripciones.index', ['filter' => 'expired']) }}">Vencidas</a>
                     </li>
                 </ul>
             </div>    
@@ -57,9 +57,10 @@
                 @php
                     $heads = [
                         'ID',
-                        'Enviado MM/DD/YY',
                         'Usuario', 
-                        "Estado", 
+                        'Fecha inicio MM/DD/YY',
+                        'Fecha Fin MM/DD/YY',
+                        "Estatus", 
                         ['label' => 'Acciones','no-export' => true, 'width' => 8], 
                     ];
 
@@ -76,55 +77,52 @@
                             'url' => '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
                                 ],
                                 'order' => [[1, 'desc']],
-                        "columns" => [null, null, null, ['orderable' => false], ['orderable' => false]],
                     ];
                 @endphp
 
                 <x-adminlte-datatable id="table1" :heads="$heads" :config="$config">
-                    @foreach($pagos as $pago)
+                    @foreach($suscripciones as $s)
                     @php 
-                    $status = $pago->validado->value;
-                    $turnOffActionValidar = false;
-                    $turnOffActionRechazar = false;
-                        $rowClass = '';
-                        if($status == 'Aprobado'){
-                            $turnOffActionValidar = true;
-                            $rowClass = 'table-dark text-success';
-                        }
-                        else if($status == 'Rechazado'){
-                            $turnOffActionRechazar = true; 
-                            $rowClass = 'table-dark text-danger';
-                        }
-                        else{ 
-                            $rowClass = ''; 
-                        }
+                    // $status = $pago->validado->value;
+                    // $turnOffActionValidar = false;
+                    // $turnOffActionRechazar = false;
+                    //     $rowClass = '';
+                    //     if($status == 'Aprobado'){
+                    //         $turnOffActionValidar = true;
+                    //         $rowClass = 'table-dark text-success';
+                    //     }
+                    //     else if($status == 'Rechazado'){
+                    //         $turnOffActionRechazar = true; 
+                    //         $rowClass = 'table-dark text-danger';
+                    //     }
+                    //     else{ 
+                    //         $rowClass = ''; 
+                    //     }
+                    $rowClass = '';
                     @endphp
                         <tr class="{{ $rowClass }}">
-                            <td>{{ $pago->id }}</td>
-                            <td>{{ $pago->created_at }}</td>
-                            <td>{{ $pago->user->email }}</td> 
-                            <td>{{ $pago->validado }}</td> 
-    
+                            <td>{{ $s->id }}</td>
+                            <td>{{ $s->user->email }}</td>
+                            <td>{{ $s->fecha_inicio }}</td> 
+                            <td>{{ $s->fecha_fin }}</td>
+                            <td>{{ $s->estatus->value }}</td>  
                             <td>
-                                    <form  action="{{ route('pagos.validarPago') }}" method="post" class="formValidar d-flex">
-                                    <a href="{{ route('pagos.displayPhoto', $pago->id) }}" class="btn btn-md btn-default text-secondary mx-1" title="Show" target="_blank">
-                                        <i class="fas fa-lg fa-file-image"></i>
-                                    </a>
-                                        @csrf
-                                        <input type="hidden" name="action" id="action-{{ $pago->id }}">
-                                        <input type="hidden" name="id" value="{{ $pago->id }}">
-                                        <button type="submit" class="btn btn-md btn-default text-primary mx-1 btn-validate" title="Validar"
-                                        {{ $turnOffActionValidar ? 'disabled' : '' }}
-                                        >
-                                            <i class="fas fa-lg fa-check"></i>
-                                        </button>
-                                        <button type="submit" class="btn btn-md btn-default text-danger mx-1 btn-reject" title="Rechazar"
-                                        {{ $turnOffActionRechazar ? 'disabled' : '' }}
-                                        
-                                        >
-                                            <i class="fas fa-lg fa-times"></i>
-                                        </button> 
-                                    </form>
+                                <form  action="{{ route('suscripciones.actualizarSuscripcion') }}" method="post" class="formActualizar d-flex">
+
+                                    @csrf
+                                    {{-- <input type="hidden" name="action" id="action-{{ $pago->id }}">
+                                    <input type="hidden" name="id" value="{{ $pago->id }}"> --}}
+                                    <button type="submit" class="btn btn-md btn-default text-primary mx-1 btn-validate" title="Validar"
+                                    {{-- {{ $turnOffActionValidar ? 'disabled' : '' }} --}}
+                                    >
+                                        <i class="fas fa-lg fa-check"></i>
+                                    </button>
+                                    <button type="submit" class="btn btn-md btn-default text-danger mx-1 btn-reject" title="Rechazar"
+                                    {{-- {{ $turnOffActionRechazar ? 'disabled' : '' }} --}}
+                                    >
+                                        <i class="fas fa-lg fa-times"></i>
+                                    </button> 
+                                </form>
                             </td>
                         </tr>
                     @endforeach
@@ -218,7 +216,7 @@
                 $('#error-alert').fadeOut('slow');
             }, 5000);
 
-            $('.formValidar').submit(function(e) {
+            $('.formActualizar').submit(function(e) {
         e.preventDefault();
         var action = '';
         var formId = $(this).find('input[name="action"]').attr('id');

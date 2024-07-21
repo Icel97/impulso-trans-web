@@ -10,7 +10,7 @@ class Suscripcion extends Model
 {
     use HasFactory;
 
-    protected $table = "sucripciones"; 
+    protected $table = "suscripciones"; 
     protected $primaryKey = "id"; 
 
     protected $fillable = [
@@ -18,7 +18,6 @@ class Suscripcion extends Model
         "fecha_inicio",
         "fecha_fin", 
         "usuario_id",
-        "pago_id", 
     ];
 
     protected $casts = [
@@ -30,8 +29,4 @@ class Suscripcion extends Model
         return $this->belongsTo(User::class, 'usuario_id', 'id');
     } 
 
-    public function pago()
-    {
-        return $this->belongsTo(Pago::class, 'pago_id', 'id'); 
-    } 
 }

@@ -18,5 +18,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/pagos',[PagoController::class, 'getAllPagos']);
+Route::get('/pagos',[PagoController::class, 'index']);
 Route::post('/pagos',[PagoController::class, 'createPago']); 

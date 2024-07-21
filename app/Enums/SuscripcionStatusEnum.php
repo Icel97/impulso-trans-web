@@ -2,7 +2,7 @@
 
 namespace App\enums;
 
-enum SucripcionStatusEnum: string
+enum SuscripcionStatusEnum: string
 { 
     case Activa = 'Activa'; 
     case Inactiva = 'Inactiva'; 

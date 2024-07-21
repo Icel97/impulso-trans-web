@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Jetstream\Jetstream;
+use Illuminate\Support\Facades\DB; 
+use App\Enums\SuscripcionStatusEnum; 
 
 class CreateNewUser implements CreatesNewUsers
 {
@@ -31,5 +33,23 @@ class CreateNewUser implements CreatesNewUsers
         //     'email' => $input['email'],
         //     'password' => Hash::make($input['password']),
         // ]);
+
+        return DB::transaction(function() use ($input) { 
+            $user = User::create([
+                'name' => $input['name'],
+                'email' => $input['email'],
+                'password' => Hash::make($input['password']),
+            ]);
+
+            // try {
+            //     $user->suscripcion()->create([
+            //         'estatus' => SuscripcionStatusEnum::Inactiva,
+            //     ]);
+            // } catch (\Throwable $th) {
+            //     $user->delete(); 
+            //     throw $th; 
+            // }
+            return $user;
+        });
     }
 }

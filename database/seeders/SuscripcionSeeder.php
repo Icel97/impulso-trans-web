@@ -6,7 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 
-class PagoSeeder extends Seeder
+class SuscripcionSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,11 +15,13 @@ class PagoSeeder extends Seeder
     {
         $users = User::all();
 
+
         foreach ($users as $user) {
-            \App\Models\Pago::factory()->create([
-                'comprobante_url' => 'C:\Users\sgale\Downloads\Pasaporte.pdf',
+            \App\Models\Suscripcion::factory()->create([
+                'estatus' => 'Inactiva',
                 'usuario_id' => $user->id,
             ]);
-        }
+        } 
+
     }
 }

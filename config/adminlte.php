@@ -328,7 +328,7 @@ return [
             'url' => 'profile',
             'icon' => 'fas fa-fw fa-user',
         ],
-        ['header' => 'Ejemplo'],
+        ['header' => 'Afiliación'],
         [
             'text' => 'Productos',
             'url' => 'productos',
@@ -338,6 +338,11 @@ return [
             'text' => 'Pagos',
             'url' => 'pagos',
             'icon' => 'fas fa-fw fa-file-invoice-dollar',
+        ],
+        [
+            'text' => 'Suscripciones',
+            'url' => 'suscripciones',
+            'icon' => 'fas fa-fw fa-address-card',
         ],
         ['header' => 'Usuarios'],
         [

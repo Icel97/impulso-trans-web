@@ -60,4 +60,9 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function suscripcion()
+    {
+        return $this->hasOne(Suscripcion::class, 'usuario_id', 'id');
+    } 
 }

@@ -15,6 +15,12 @@ class UserSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
 
         \App\Models\User::factory()->create([
+            'name' => 'Alex Santiago',
+            'email' => 'sg.alex32@gmail.com',
+            'password' => bcrypt('12341234'),
+        ]);
+
+        \App\Models\User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@gmail.com',
             'password' => bcrypt('12341234'),
@@ -25,6 +31,12 @@ class UserSeeder extends Seeder
             'email' => 'test2@gmail.com',
             'password' => bcrypt('12341234'),
         ]);
+
+        // \App\Models\User::factory()->create([
+        //     'name' => 'Test User3',
+        //     'email' => 'test3@gmail.com',
+        //     'password' => bcrypt('12341234'),
+        // ]);
 
     }
 }

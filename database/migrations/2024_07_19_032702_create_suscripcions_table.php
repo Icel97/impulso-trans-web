@@ -12,13 +12,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('suscripcions', function (Blueprint $table) {
-            $table->id();
-            $table->enum('estado', SuscripcionStatusEnum::toArray())->default(SuscripcionStatusEnum::Inactivo->value);
-            $table->date('fecha_inicio')->default(now()); 
-            $table->date('fecha_fin'); 
+        Schema::create('suscripciones', function (Blueprint $table) {
+            $table->id(); 
+            $table->enum('estatus', SuscripcionStatusEnum::toArray())->default(SuscripcionStatusEnum::Inactiva->value);
+            //dates can be null
+            $table->date('fecha_inicio')->nullable();
+            $table->date('fecha_fin')->nullable();
             $table->foreignId('usuario_id')->constrained('users'); 
-            $table->foreignId('pago_id')->constrained('pagos'); 
             $table->timestamps();
         });
     }
