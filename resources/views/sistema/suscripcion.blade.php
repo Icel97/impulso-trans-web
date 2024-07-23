@@ -5,7 +5,6 @@
 @section('content_header')
     <div class="d-flex justify-content-between">
         <h1>Suscripciones</h1>
-
     </div>
 @stop
 
@@ -29,13 +28,13 @@
                         <a class="nav-link {{ $filter === 'all' ? 'active' : '' }}" href="{{ route('suscripciones.index', ['filter' => 'all']) }}">Todos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ $filter === 'pending' ? 'active' : '' }}" href="{{ route('suscripciones.index', ['filter' => 'active']) }}">Activas</a>
+                        <a class="nav-link {{ $filter === 'active' ? 'active' : '' }}" href="{{ route('suscripciones.index', ['filter' => 'active']) }}">Activas</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ $filter === 'approved' ? 'active' : '' }}" href="{{ route('suscripciones.index', ['filter' => 'inactive']) }}">Inactivas</a>
+                        <a class="nav-link {{ $filter === 'inactive' ? 'active' : '' }}" href="{{ route('suscripciones.index', ['filter' => 'inactive']) }}">Inactivas</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ $filter === 'rejected' ? 'active' : '' }}" href="{{ route('suscripciones.index', ['filter' => 'expired']) }}">Vencidas</a>
+                        <a class="nav-link {{ $filter === 'expired' ? 'active' : '' }}" href="{{ route('suscripciones.index', ['filter' => 'expired']) }}">Vencidas</a>
                     </li>
                 </ul>
             </div>    
@@ -47,6 +46,11 @@
                 @elseif (session('success') == 'Pago rechazado')
                     <x-adminlte-alert theme="success" title="Estado de pago actualizado" id="success-alert">
                         Estado del pago actualizado correctamente. 
+                    </x-adminlte-alert>
+
+                @elseif(session('error') === "Suscripción no encontrada")
+                    <x-adminlte-alert theme="danger" title="Error" id="error-alert">
+                        Suscripción no encontrada. 
                     </x-adminlte-alert>
                 @elseif (session('error'))
                     <x-adminlte-alert theme="danger" title="Error" id="error-alert">
@@ -76,7 +80,7 @@
                         'language'=> [
                             'url' => '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
                                 ],
-                                'order' => [[1, 'desc']],
+                        'order' => [[1, 'desc']],
                     ];
                 @endphp
 
@@ -103,9 +107,10 @@
                         <tr class="{{ $rowClass }}">
                             <td>{{ $s->id }}</td>
                             <td>{{ $s->user->email }}</td>
-                            <td>{{ $s->fecha_inicio }}</td> 
+                            <td>{{ $s->fecha_inicio  }}</td> 
                             <td>{{ $s->fecha_fin }}</td>
-                            <td>{{ $s->estatus->value }}</td>  
+                            <td>{{ $s->estatus->value }}</td>
+                            {{-- <td>{{ $s}}   --}}
                             <td>
                                 <form  action="{{ route('suscripciones.actualizarSuscripcion') }}" method="post" class="formActualizar d-flex">
 

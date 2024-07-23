@@ -11,6 +11,28 @@ class SuscripcionController extends Controller
     
     public function index(Request $request)
     {
+
+        $id = $request->query('id', null);
+        
+        if ($id) {
+            $suscripciones = Suscripcion::find($id);
+
+            // $is_active = $suscripciones->estatus == 'Inactiva'
+            // if ($is_active) {
+            // } else {
+            //     $filter  = "inactive"; 
+            // } 
+
+            $filter  = "custom"; 
+            
+            if (!$suscripciones) {
+                return redirect()->route('suscripciones.index')->with('error', 'Suscripción no encontrada');
+            }
+            #wrap in an array
+            $suscripciones = [$suscripciones]; 
+            return view('sistema.suscripcion', compact('suscripciones', 'filter'));
+        }
+        
         $filter = $request->query('filter', 'all'); 
         switch ($filter) {
             case 'active':
@@ -26,6 +48,7 @@ class SuscripcionController extends Controller
                 $suscripciones = Suscripcion::orderBy('created_at', 'desc')->get();
                 break;
         } 
+
         return view('sistema.suscripcion', compact('suscripciones','filter')); 
     }
 

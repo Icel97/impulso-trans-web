@@ -61,8 +61,36 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
+
+ /**
+     * Get the URL to the user's profile photo.
+     *
+     * @return string
+     */
+    public function getProfilePhotoUrlAttribute()
+    {
+        return $this->profile_photo_path
+            ? Storage::disk($this->profilePhotoDisk())->url($this->profile_photo_path)
+            : $this->defaultProfilePhotoUrl();
+    }
+
+    /**
+     * Get the default profile photo URL if no profile photo has been uploaded.
+     *
+     * @return string
+     */
+    protected function defaultProfilePhotoUrl()
+    {
+        return asset('blank-profile-picure-1024x1024.webp'); // Replace with your default image path
+    }
+
+
     public function suscripcion()
     {
         return $this->hasOne(Suscripcion::class, 'usuario_id', 'id');
     } 
+    public function pagos() 
+    { 
+        return $this->hasMany(Pago::class, 'usuario_id', 'id'); 
+    }
 }

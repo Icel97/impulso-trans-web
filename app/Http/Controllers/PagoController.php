@@ -117,7 +117,7 @@ class PagoController extends Controller
     public function displayPhoto($id)
     {
         $pago = Pago::find($id); 
-        return response()->file(storage_path('app/public/pagos/' . date('Y') . '/' . date('m') . '/' . $pago->comprobante_url));
+        return response()->file(storage_path('app/public/pagos/' . date('Y') . '/' . $pago->comprobante_url));
     }
 
 }

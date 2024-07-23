@@ -50,7 +50,8 @@
                         'ID',
                         'Nombre',
                         'Email',
-                        ['label' => 'Actions', 'no-export' => true, 'width' => 15],
+                        'Rol', 
+                        ['label' => 'Acciones', 'no-export' => true, 'width' => 15],
                     ];
 
                     $btnEdit = '';
@@ -61,7 +62,8 @@
                     $config = [
                         'language'=> [
                             'url' => '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
-                        ]
+                            ],
+                        'columns' => [null, null, null,  ['orderable' => false], ['orderable' => false]],
                     ];
                 @endphp
 
@@ -72,6 +74,15 @@
                                 <td>{{ $usuario->name }}</td>
                                 <td>{{ $usuario->email }}</td>
                                 <td>
+                                    @foreach ($usuario->roles as $rol)
+                                        <span class="badge badge-info">{{ $rol->name }}</span>
+                                    @endforeach
+                                <td>
+                                    {{-- ir a perfil --}}
+                                    <a href="{{ route('usuarios.show', $usuario->id) }}" class="btn btn-xs btn-default text-primary mx-1 shadow" title="Perfil">
+                                        <i class="fa fa-lg fa-fw fa-eye"></i> 
+                                    </a>
+
                                     <!-- editar nombre -->
                                     <button class="btn btn-xs btn-default text-primary mx-1 shadow edit-button" data-id="{{ $usuario->id }}" title="Edit">
                                         <i class="fa fa-lg fa-fw fa-pen"></i>

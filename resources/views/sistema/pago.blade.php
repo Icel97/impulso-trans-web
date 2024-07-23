@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Ejemplo')
+@section('title', 'Impulso trans - Pagos')
 
 @section('content_header')
     <div class="d-flex justify-content-between">
@@ -101,10 +101,9 @@
                     @endphp
                         <tr class="{{ $rowClass }}">
                             <td>{{ $pago->id }}</td>
-                            <td>{{ $pago->created_at }}</td>
+                            <td>{{ $pago->created_at}}</td>
                             <td>{{ $pago->user->email }}</td> 
                             <td>{{ $pago->validado }}</td> 
-    
                             <td>
                                     <form  action="{{ route('pagos.validarPago') }}" method="post" class="formValidar d-flex">
                                     <a href="{{ route('pagos.displayPhoto', $pago->id) }}" class="btn btn-md btn-default text-secondary mx-1" title="Show" target="_blank">
@@ -113,6 +112,7 @@
                                         @csrf
                                         <input type="hidden" name="action" id="action-{{ $pago->id }}">
                                         <input type="hidden" name="id" value="{{ $pago->id }}">
+                                        @if(!$pago->validado->value == 'Aprobado' && !$pago->validado->value == 'Rechazado')
                                         <button type="submit" class="btn btn-md btn-default text-primary mx-1 btn-validate" title="Validar"
                                         {{ $turnOffActionValidar ? 'disabled' : '' }}
                                         >
@@ -124,6 +124,7 @@
                                         >
                                             <i class="fas fa-lg fa-times"></i>
                                         </button> 
+                                        @endif
                                     </form>
                             </td>
                         </tr>

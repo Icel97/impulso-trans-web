@@ -45,7 +45,8 @@ class AsignarController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $usuario = User::find($id); 
+        return view('sistema.user.show', compact('usuario')); 
     }
 
     /**
