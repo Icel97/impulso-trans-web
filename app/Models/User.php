@@ -27,8 +27,25 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'apellidos',
+        'identidad_genero',
+        'pronombres',
+        'fecha_nacimiento',
         'email',
         'password',
+        'telefono',
+        'id_estado_residencia',
+        'id_municipio_residencia',
+        'discapacidad',
+        'neurodivergencia',
+        'indigena',
+        'afrodescendiente',
+        'two_factor_secret',
+        'two_factor_recovery_codes',
+        'two_factor_confirmed_at',
+        'remember_token',
+        'current_team_id',
+        'profile_photo_path',
     ];
 
     /**
@@ -50,6 +67,10 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'fecha_nacimiento' => 'date',
+        'neurodivergencia' => 'boolean',
+        'indigena' => 'boolean',
+        'afrodescendiente' => 'boolean',
     ];
 
     /**
@@ -60,46 +81,4 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
-
-
- /**
-     * Get the URL to the user's profile photo.
-     *
-     * @return string
-     */
-    public function getProfilePhotoUrlAttribute()
-    {
-        return $this->profile_photo_path
-            ? Storage::disk($this->profilePhotoDisk())->url($this->profile_photo_path)
-            : $this->defaultProfilePhotoUrl();
-    }
-
-    /**
-     * Get the default profile photo URL if no profile photo has been uploaded.
-     *
-     * @return string
-     */
-    protected function defaultProfilePhotoUrl()
-    {
-        return asset('blank-profile-picure-1024x1024.webp'); // Replace with your default image path
-    }
-
-
-    public function suscripcion()
-    {
-        return $this->hasOne(Suscripcion::class, 'usuario_id', 'id');
-    }
-    public function historial_suscripcion()
-    {
-        return $this->hasMany(Historial_Suscripcion::class, 'usuario_id', 'id');
-    }
-    
-    public function pago() 
-    { 
-        return $this->hasOne(Pago::class, 'usuario_id', 'id'); 
-    }
-    public function historial_pago()
-    {
-        return $this->hasMany(Historial_Pago::class, 'usuario_id', 'id');
-    }
 }
