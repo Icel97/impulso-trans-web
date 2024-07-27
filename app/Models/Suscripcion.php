@@ -18,6 +18,7 @@ class Suscripcion extends Model
         "fecha_inicio",
         "fecha_fin", 
         "usuario_id",
+        'pago_id'
     ];
 
     protected $casts = [
@@ -28,5 +29,15 @@ class Suscripcion extends Model
     {
         return $this->belongsTo(User::class, 'usuario_id', 'id');
     } 
+
+    public function pago()
+    {
+        return $this->hasOne(Pago::class, 'suscripcion_id', 'id'); 
+    }
+
+    public function history_subscriptions()
+    {
+        return $this->hasMany(Historial_Suscripcion::class, 'suscripcion_id', 'id');
+    }
 
 }

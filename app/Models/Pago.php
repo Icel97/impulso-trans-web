@@ -18,7 +18,9 @@ class Pago extends Model
         'comprobante_url',
         'validado',
         'usuario_id',    
-        'created_at',    
+        'fecha_envio',
+        'created_at', 
+        'updated_at',	   
     ];
 
     protected $hidden = [
@@ -33,5 +35,8 @@ class Pago extends Model
     {
         return $this->belongsTo(User::class, 'usuario_id', 'id');
     } 
-
+    public function history_payments()
+    {
+        return $this->hasMany(Historial_Pago::class, 'pago_id', 'id');
+    }
 }

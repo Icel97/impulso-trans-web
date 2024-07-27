@@ -36,16 +36,16 @@ class SuscripcionController extends Controller
         $filter = $request->query('filter', 'all'); 
         switch ($filter) {
             case 'active':
-                $suscripciones = Suscripcion::where('estatus', 'Activa')->orderBy('created_at', 'desc')->get(); 
+                $suscripciones = Suscripcion::where('estatus', 'Activa')->get(); 
                 break;
             case 'inactive':
-                $suscripciones = Suscripcion::where('estatus', 'Inactiva')->orderBy('created_at', 'desc')->get();
+                $suscripciones = Suscripcion::where('estatus', 'Inactiva')->get();
                 break;
             case 'expired':
-                $suscripciones = Suscripcion::where('estatus', 'Vencida')->orderBy('created_at', 'desc')->get();
+                $suscripciones = Suscripcion::where('estatus', 'Vencida')->get();
                 break;
             default:
-                $suscripciones = Suscripcion::orderBy('created_at', 'desc')->get();
+                $suscripciones = Suscripcion::get();
                 break;
         } 
 
@@ -56,7 +56,7 @@ class SuscripcionController extends Controller
     {
         $suscripcion = Suscripcion::find($request->id); 
         if ($suscripcion == null) {
-            return response()->json(['error' => 'Suscripcion not found.'], 404);
+            return response()->json(['error' => 'Suscripcion not found2.'], 404);
         }
         $suscripcion->estatus = $request->estatus;
         $suscripcion->save();

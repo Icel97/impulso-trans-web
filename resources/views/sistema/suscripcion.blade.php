@@ -80,7 +80,9 @@
                         'language'=> [
                             'url' => '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
                                 ],
-                        'order' => [[1, 'desc']],
+                        // 'order' => [[0, 'desc']],
+                        'responsive' => true,
+                        "columns"=> [null,null,null,null, ["orderable"=>false], ["orderable"=>false]],
                     ];
                 @endphp
 
@@ -112,22 +114,22 @@
                             <td>{{ $s->estatus->value }}</td>
                             {{-- <td>{{ $s}}   --}}
                             <td>
-                                <form  action="{{ route('suscripciones.actualizarSuscripcion') }}" method="post" class="formActualizar d-flex">
+                                {{-- <form  action="{{ route('suscripciones.actualizarSuscripcion') }}" method="post" class="formActualizar d-flex">
 
                                     @csrf
-                                    {{-- <input type="hidden" name="action" id="action-{{ $pago->id }}">
-                                    <input type="hidden" name="id" value="{{ $pago->id }}"> --}}
+                                    <input type="hidden" name="action" id="action-{{ $pago->id }}">
+                                    <input type="hidden" name="id" value="{{ $pago->id }}">
                                     <button type="submit" class="btn btn-md btn-default text-primary mx-1 btn-validate" title="Validar"
-                                    {{-- {{ $turnOffActionValidar ? 'disabled' : '' }} --}}
+                                    {{ $turnOffActionValidar ? 'disabled' : '' }}
                                     >
                                         <i class="fas fa-lg fa-check"></i>
                                     </button>
                                     <button type="submit" class="btn btn-md btn-default text-danger mx-1 btn-reject" title="Rechazar"
-                                    {{-- {{ $turnOffActionRechazar ? 'disabled' : '' }} --}}
+                                    {{ $turnOffActionRechazar ? 'disabled' : '' }}
                                     >
                                         <i class="fas fa-lg fa-times"></i>
                                     </button> 
-                                </form>
+                                </form> --}}
                             </td>
                         </tr>
                     @endforeach

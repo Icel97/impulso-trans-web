@@ -16,7 +16,9 @@ return new class extends Migration
             $table->id();
             $table->string('comprobante_url'); 
             $table->enum('validado', PagoStatusEnum::toArray())->default(PagoStatusEnum::Pendiente->value);
+            $table->dateTime('fecha_envio')->nullable();
             $table->foreignId('usuario_id')->constrained('users'); 
+            #created at and updated at default now 
             $table->timestamps();
         });
     }

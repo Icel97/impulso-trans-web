@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+use App\Models\Historial_Pago;
+use Illuminate\Support\Facades\Storage;
 
 class PagoController extends Controller
 {
@@ -27,6 +30,9 @@ class PagoController extends Controller
                 break;
             case 'pending':
                 $pagos = Pago::where('validado', "Pendiente")->orderBy('created_at', 'desc')->get();
+                break;
+            case 'review':
+                $pagos = Pago::where('validado', 'Revision')->orderBy('created_at', 'desc')->get();
                 break;
             default:
                 $pagos = Pago::orderBy('created_at', 'desc')->get();
@@ -67,20 +73,23 @@ class PagoController extends Controller
         $filePath = $request->file('comprobante_url')->storeAs('public/pagos/' . date('Y') . '/' . $fileName);
 
         $file_path_raw =  $date . '_' . $userId . "_pago."; # no extension 
-        $pago = Pago::where('comprobante_url', 'like', '%' . $file_path_raw . '%')->first(); 
-    
+        $pago = Pago::where('usuario_id', $request->user_id)->first();
+        
         if ($pago) {
-            return response()->json(['error' => 'Pago already exists.'], 400);
-        } 
-
-        $pago = new Pago();
-        $pago->comprobante_url = $fileName; 
-        $pago->validado = PagoStatusEnum::Pendiente; #default pago status. has to be validated by admin 
-        $pago->usuario_id = $request->user_id;
-
-        $pago->save();
-
-        return response()->json($pago);
+            $estatus = $pago->validado; 
+            if ($estatus === PagoStatusEnum::Pendiente) {
+                $pago->comprobante_url = $fileName;
+                $pago->validado = PagoStatusEnum::Revision; 
+                $pago->fecha_envio = now();
+                $pago->save();
+                return response()->json(['success' => 'Pago updated successfully.'], 200);
+            } 
+            return response()->json(['error' => 'Pago already exists.'], 400); 
+         
+        } else 
+        {
+            return response()->json(['error' => 'There has been an error.'], 400);
+        }
     }
 
     public function show($id)
@@ -99,25 +108,58 @@ class PagoController extends Controller
         $id = $request->input('id'); 
         $pago = Pago::find($id);
     
+        if (!$pago) {
+            return redirect()->route('pagos.index')->with('error', 'Pago no encontrado');
+        }
+    
+        DB::transaction(function () use ($pago, $action) {
+            if ($action === 'accepted') {
+                // Create a history record before updating the status
+                // Historial_Pago::create([
+                //     'pago_id' => $pago->id,
+                //     'comprobante_url' => $pago->comprobante_url,
+                //     'validado' => $pago->validado,
+                //     'fecha_envio' => $pago->fecha_envio,
+                //     'usuario_id' => $pago->usuario_id,
+                //     'created_at' => $pago->created_at,
+                //     'updated_at' => $pago->updated_at,
+                // ]);
+    
+                $pago->validado = PagoStatusEnum::Aprobado; 
+                $pago->save();
+            } elseif ($action === 'rejected') {
+                $pago->validado = PagoStatusEnum::Rechazado;
+                $pago->save();
+            }
+        });
+    
         if ($action === 'accepted') {
-            // Logic for accepting the payment
-            $pago->validado = PagoStatusEnum::Aprobado; 
-            $pago->save();
             return redirect()->route('pagos.index')->with('success', 'Pago validado');
         } elseif ($action === 'rejected') {
-            // Logic for rejecting the payment
-            $pago->validado = PagoStatusEnum::Rechazado;
-            $pago->save();
             return redirect()->route('pagos.index')->with('success', 'Pago rechazado');
         }
     
         return redirect()->route('pagos.index')->with('error', 'Acción no reconocida');
     }
-    
     public function displayPhoto($id)
     {
-        $pago = Pago::find($id); 
-        return response()->file(storage_path('app/public/pagos/' . date('Y') . '/' . $pago->comprobante_url));
+        try {
+            $pago = Pago::findOrFail($id);  // Use findOrFail to throw an exception if not found
+            
+            $filePath = storage_path('app/public/pagos/' . date('Y') . '/' . $pago->comprobante_url);
+            
+            if (!Storage::disk('public')->exists('pagos/' . date('Y') . '/' . $pago->comprobante_url)) {
+                throw new \Exception('File not found.');
+            }
+    
+            return response()->file($filePath);
+        } catch (\Exception $e) {
+            // Log the error
+            Log::error('Error displaying photo: ' . $e->getMessage());
+            
+            // Handle the error (e.g., return a default image, error message, or redirect)
+            return redirect()->back()->with('error', 'Error displaying the photo: ' . $e->getMessage());
+        }
     }
 
 }

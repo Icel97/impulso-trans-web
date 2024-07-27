@@ -5,7 +5,7 @@
 @section('content_header')
     <div class="d-flex justify-content-between">
         <h1>Pagos</h1>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newProductModal">Nuevo Producto</button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newProductModal">Crear Pago</button>
     </div>
 @stop
 
@@ -30,6 +30,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ $filter === 'pending' ? 'active' : '' }}" href="{{ route('pagos.index', ['filter' => 'pending']) }}">Pendientes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ $filter === 'rejected' ? 'active' : '' }}" href="{{ route('pagos.index', ['filter' => 'review']) }}">Por revisar</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ $filter === 'approved' ? 'active' : '' }}" href="{{ route('pagos.index', ['filter' => 'approved']) }}">Aprobados</a>
@@ -101,10 +104,11 @@
                     @endphp
                         <tr class="{{ $rowClass }}">
                             <td>{{ $pago->id }}</td>
-                            <td>{{ $pago->created_at}}</td>
+                            <td>{{ $pago->fecha_envio}}</td>
                             <td>{{ $pago->user->email }}</td> 
                             <td>{{ $pago->validado }}</td> 
                             <td>
+                                @if($pago->validado->value !== "Pendiente")
                                     <form  action="{{ route('pagos.validarPago') }}" method="post" class="formValidar d-flex">
                                     <a href="{{ route('pagos.displayPhoto', $pago->id) }}" class="btn btn-md btn-default text-secondary mx-1" title="Show" target="_blank">
                                         <i class="fas fa-lg fa-file-image"></i>
@@ -112,20 +116,20 @@
                                         @csrf
                                         <input type="hidden" name="action" id="action-{{ $pago->id }}">
                                         <input type="hidden" name="id" value="{{ $pago->id }}">
-                                        @if(!$pago->validado->value == 'Aprobado' && !$pago->validado->value == 'Rechazado')
-                                        <button type="submit" class="btn btn-md btn-default text-primary mx-1 btn-validate" title="Validar"
-                                        {{ $turnOffActionValidar ? 'disabled' : '' }}
-                                        >
-                                            <i class="fas fa-lg fa-check"></i>
-                                        </button>
-                                        <button type="submit" class="btn btn-md btn-default text-danger mx-1 btn-reject" title="Rechazar"
-                                        {{ $turnOffActionRechazar ? 'disabled' : '' }}
-                                        
-                                        >
-                                            <i class="fas fa-lg fa-times"></i>
-                                        </button> 
-                                        @endif
+                                        @if($pago->validado->value !== 'Aprobado' && $pago->validado->value !== 'Rechazado' )
+                                            <button type="submit" class="btn btn-md btn-default text-primary mx-1 btn-validate" title="Validar"
+                                                {{ $turnOffActionValidar ? 'disabled' : '' }}
+                                            >
+                                                <i class="fas fa-lg fa-check"></i>
+                                            </button>
+                                            <button type="submit" class="btn btn-md btn-default text-danger mx-1 btn-reject" title="Rechazar"
+                                                {{ $turnOffActionRechazar ? 'disabled' : '' }}
+                                            >
+                                                <i class="fas fa-lg fa-times"></i>
+                                            </button>
+                                    @endif
                                     </form>
+                                @endif
                             </td>
                         </tr>
                     @endforeach

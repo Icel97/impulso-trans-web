@@ -88,9 +88,18 @@ class User extends Authenticatable
     public function suscripcion()
     {
         return $this->hasOne(Suscripcion::class, 'usuario_id', 'id');
-    } 
-    public function pagos() 
+    }
+    public function historial_suscripcion()
+    {
+        return $this->hasMany(Historial_Suscripcion::class, 'usuario_id', 'id');
+    }
+    
+    public function pago() 
     { 
-        return $this->hasMany(Pago::class, 'usuario_id', 'id'); 
+        return $this->hasOne(Pago::class, 'usuario_id', 'id'); 
+    }
+    public function historial_pago()
+    {
+        return $this->hasMany(Historial_Pago::class, 'usuario_id', 'id');
     }
 }

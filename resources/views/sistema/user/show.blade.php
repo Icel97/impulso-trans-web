@@ -1,14 +1,14 @@
 @extends('adminlte::page')
 
 @php
-    $name = 'Impulso Trans - ' . $usuario->name; 
+    $name = 'Impulso Trans - Perfil usuario ' . $usuario->name; 
 @endphp
 @section('title', $name)
 
 @section('content_header')
     <div class="d-flex justify-content-between">
         <h1>
-            {{ $usuario->name }}
+            Perfil de usuario
         </h1>
                             
         @can('Crear Usuario')
@@ -51,26 +51,15 @@
                 @endif
 
                     {{--  Profile section, show photo, details, payments, current suscription,  --}}
-              {{-- Profile section --}}
-                <div class="row">
-                    <div class="col-md-3">
-                        <img src="{{ $usuario->profile_photo_url ?? asset('blank-profile-picure-1024x1024.webp') }}" alt="Foto de perfil" class="img-thumbnail">
-                    </div>
-                    <div class="col-md-9">
-                        <h3>{{ $usuario->name }}</h3>
-                        <p>Email: {{ $usuario->email }}</p>
-                        <p>Rol: 
-                            @foreach ($usuario->roles as $rol)
-                                <span class="badge badge-info">{{ $rol->name }}</span>
-                            @endforeach
-                        </p>
-                    </div>
-                </div>
+
 
                 {{-- Tabs for Payments and Subscriptions --}}
                 <ul class="nav nav-tabs" id="profileTab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" id="payments-tab" data-toggle="tab" href="#payments" role="tab" aria-controls="payments" aria-selected="true">Pagos</a>
+                        <a class="nav-link active" id="perfil-tab" data-toggle="tab" href="#perfil" role="tab" aria-controls="perfil" aria-selected="true">Perfil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="payments-tab" data-toggle="tab" href="#payments" role="tab" aria-controls="payments" aria-selected="false">Pagos</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="subscriptions-tab" data-toggle="tab" href="#subscriptions" role="tab" aria-controls="subscriptions" aria-selected="false">Suscripciones</a>
@@ -78,31 +67,76 @@
                 </ul>
 
                 <div class="tab-content" id="profileTabContent">
-                    <div class="tab-pane fade show active" id="payments" role="tabpanel" aria-labelledby="payments-tab">
-                        {{-- Payments Table --}}
-                        <x-adminlte-datatable id="paymentsTable" :heads="['ID', 'Monto', 'Fecha', 'Estatus']">
-                            @foreach($usuario->pagos as $pago)
+                    <div class="tab-pane fade show active" id="perfil" role="tabpanel" aria-labelledby="perfil-tab">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <img src="{{ $usuario->profile_photo_url ?? asset('blank-profile-picure-1024x1024.webp') }}" alt="Foto de perfil" class="img-thumbnail">
+                            </div>
+                            <div class="col-md-8">
+                                <h3>{{ $usuario->name }}</h3>
+                                <p>{{ $usuario->email }}</p>
+                                <p>{{ $usuario->phone }}</p>
+                                <p>{{ $usuario->address }}</p>
+                                <p>{{ $usuario->city }}</p>
+                                <p>{{ $usuario->state }}</p>
+                                <p>{{ $usuario->country }}</p>
+                                <p>{{ $usuario->zip }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- Payments Table --}}
+                    <div class="tab-pane fade" id="payments" role="tabpanel" aria-labelledby="payments-tab">
+                        @php 
+                        $config = [
+                        'language'=> [
+                            'url' => '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+                                ],
+                                'order' => [[1, 'desc']],
+                                'responsive' => true,
+                        "columns"=> [null,null, ["orderable"=>false]],
+                        ];
+                        @endphp
+
+                        <x-adminlte-datatable id="paymentsTable" :heads="['ID', 'Fecha envío', 'Acciones', 'estatus']" :config="$config">
+                            @foreach($usuario->historial_pago as $pago)
                                 <tr>
-                                    <td>{{ $pago->id }}</td>
-                                    <td>{{ $pago->comprobante_url }}</td>
+                                    <td>{{ $pago->pago_id }}</td>
+                                    <td>{{ $pago->fecha_envio }}</td>
+                                    <td>
+                                        <a href="{{ route('pagos.displayPhoto', $pago->pago_id) }}" class="btn btn-md btn-default text-secondary mx-1" title="Show" target="_blank">
+                                            <i class="fas fa-lg fa-file-image"></i>
+                                        </a>
+                                    </td>
                                     <td>{{ $pago->validado }}</td>
-                                    <td>{{ $pago->created_at }}</td>
+                                </tr>
+                            @endforeach
+      
+                        </x-adminlte-datatable>
+                    </div>
+                    {{-- Subscriptions Table --}}
+
+                    @php 
+                        $config = [
+                            'language'=> [
+                                'url' => '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+                            ],
+                            'order' => [[1, 'desc']],
+                            "columns"=> [null,null, ["orderable"=>false]],
+                        ];
+                    @endphp
+
+                    <div class="tab-pane fade" id="subscriptions" role="tabpanel" aria-labelledby="subscriptions-tab">
+                        <x-adminlte-datatable id="subscriptionsTable" :heads="['ID', 'Fecha Inicio', 'Fecha Fin', 'Estatus']" :config="$config">
+                            @foreach($usuario->historial_suscripcion as $suscripcion)
+                                <tr>
+                                    <td>{{ $suscripcion->suscripcion_id }}</td>
+                                    <td>{{ $suscripcion->fecha_inicio }}</td>
+                                    <td>{{ $suscripcion->fecha_fin }}</td>
+                                    <td>{{ $suscripcion->estatus }}</td>
                                 </tr>
                             @endforeach
                         </x-adminlte-datatable>
                     </div>
-                    {{-- <div class="tab-pane fade" id="subscriptions" role="tabpanel" aria-labelledby="subscriptions-tab">
-                        <x-adminlte-datatable id="subscriptionsTable" :heads="['ID', 'Fecha Inicio', 'Fecha Fin', 'Estatus']">
-                            @foreach($usuario->suscripciones as $suscripcion)
-                                <tr>
-                                    <td>{{ $suscripcion->id }}</td>
-                                    <td>{{ $suscripcion->fecha_inicio }}</td>
-                                    <td>{{ $suscripcion->fecha_fin }}</td>
-                                    <td>{{ $suscripcion->estatus->value }}</td>
-                                </tr>
-                            @endforeach
-                        </x-adminlte-datatable>
-                    </div> --}}
                 </div>
             </div>
         </div>
