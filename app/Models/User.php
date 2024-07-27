@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
@@ -17,6 +18,7 @@ class User extends Authenticatable
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
+    use HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -58,4 +60,46 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+
+ /**
+     * Get the URL to the user's profile photo.
+     *
+     * @return string
+     */
+    public function getProfilePhotoUrlAttribute()
+    {
+        return $this->profile_photo_path
+            ? Storage::disk($this->profilePhotoDisk())->url($this->profile_photo_path)
+            : $this->defaultProfilePhotoUrl();
+    }
+
+    /**
+     * Get the default profile photo URL if no profile photo has been uploaded.
+     *
+     * @return string
+     */
+    protected function defaultProfilePhotoUrl()
+    {
+        return asset('blank-profile-picure-1024x1024.webp'); // Replace with your default image path
+    }
+
+
+    public function suscripcion()
+    {
+        return $this->hasOne(Suscripcion::class, 'usuario_id', 'id');
+    }
+    public function historial_suscripcion()
+    {
+        return $this->hasMany(Historial_Suscripcion::class, 'usuario_id', 'id');
+    }
+    
+    public function pago() 
+    { 
+        return $this->hasOne(Pago::class, 'usuario_id', 'id'); 
+    }
+    public function historial_pago()
+    {
+        return $this->hasMany(Historial_Pago::class, 'usuario_id', 'id');
+    }
 }
