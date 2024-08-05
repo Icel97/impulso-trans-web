@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Perfil')
+@section('title', 'Impulso trans - Mi Perfil')
 
 @section('content_header')
     <h1> </h1>

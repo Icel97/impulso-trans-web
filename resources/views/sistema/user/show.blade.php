@@ -1,20 +1,13 @@
 @extends('adminlte::page')
 
 @php
-    $name = 'Impulso Trans - Perfil usuario ' . $usuario->name; 
+    $title = 'Impulso Trans - ' . ($usuario->name ?? 'Perfil');
 @endphp
-@section('title', $name)
+@section('title', $title)
 
 @section('content_header')
-    <div class="d-flex justify-content-between">
-        <h1>
-            Perfil de usuario
-        </h1>
-                            
-        @can('Crear Usuario')
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newUsuarioModal"><i class="fa fa-plus" aria-hidden="true"></i> Usuario</button>
-        @endcan
-    </div>
+<h1></h1>
+
 @stop
 
 @section('content')
@@ -30,8 +23,8 @@
     </div>
 
     <div id="content">
-        <div class="card">
-            <div class="card-body">
+        <div class="card" style="margin:0 !important">
+            <div >
                 @if (session('success') == 'Usuario creado')
                     <x-adminlte-alert theme="success" title="Usuario creado" id="success-alert">
                         Usuario creado correctamente.
@@ -50,9 +43,13 @@
                     </x-adminlte-alert>
                 @endif
 
-                    {{--  Profile section, show photo, details, payments, current suscription,  --}}
+                @if( $usuario == null)
+                    <x-adminlte-alert theme="danger" title="Error" id="info-alert">
+                        No existe usuario.
+                    </x-adminlte-alert> 
+                    <a href="{{ route('usuarios.index')}}" class="btn btn-secondary">Regresar</a>
 
-
+                    @else
                 {{-- Tabs for Payments and Subscriptions --}}
                 <ul class="nav nav-tabs" id="profileTab" role="tablist">
                     <li class="nav-item">
@@ -68,76 +65,22 @@
 
                 <div class="tab-content" id="profileTabContent">
                     <div class="tab-pane fade show active" id="perfil" role="tabpanel" aria-labelledby="perfil-tab">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <img src="{{ $usuario->profile_photo_url ?? asset('blank-profile-picure-1024x1024.webp') }}" alt="Foto de perfil" class="img-thumbnail">
-                            </div>
-                            <div class="col-md-8">
-                                <h3>{{ $usuario->name }}</h3>
-                                <p>{{ $usuario->email }}</p>
-                                <p>{{ $usuario->phone }}</p>
-                                <p>{{ $usuario->address }}</p>
-                                <p>{{ $usuario->city }}</p>
-                                <p>{{ $usuario->state }}</p>
-                                <p>{{ $usuario->country }}</p>
-                                <p>{{ $usuario->zip }}</p>
-                            </div>
-                        </div>
+                        @component('sistema.user.profile-detail', ['usuario' => $usuario]) 
+                        @endcomponent
                     </div>
                     {{-- Payments Table --}}
                     <div class="tab-pane fade" id="payments" role="tabpanel" aria-labelledby="payments-tab">
-                        @php 
-                        $config = [
-                        'language'=> [
-                            'url' => '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
-                                ],
-                                'order' => [[1, 'desc']],
-                                'responsive' => true,
-                        "columns"=> [null,null, ["orderable"=>false]],
-                        ];
-                        @endphp
-
-                        <x-adminlte-datatable id="paymentsTable" :heads="['ID', 'Fecha envío', 'Acciones', 'estatus']" :config="$config">
-                            @foreach($usuario->historial_pago as $pago)
-                                <tr>
-                                    <td>{{ $pago->pago_id }}</td>
-                                    <td>{{ $pago->fecha_envio }}</td>
-                                    <td>
-                                        <a href="{{ route('pagos.displayPhoto', $pago->pago_id) }}" class="btn btn-md btn-default text-secondary mx-1" title="Show" target="_blank">
-                                            <i class="fas fa-lg fa-file-image"></i>
-                                        </a>
-                                    </td>
-                                    <td>{{ $pago->validado }}</td>
-                                </tr>
-                            @endforeach
-      
-                        </x-adminlte-datatable>
+                        @component('sistema.user.profile-pagos', ['usuario' => $usuario])
+                        @endcomponent
                     </div>
                     {{-- Subscriptions Table --}}
 
-                    @php 
-                        $config = [
-                            'language'=> [
-                                'url' => '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
-                            ],
-                            'order' => [[1, 'desc']],
-                            "columns"=> [null,null, ["orderable"=>false]],
-                        ];
-                    @endphp
-
                     <div class="tab-pane fade" id="subscriptions" role="tabpanel" aria-labelledby="subscriptions-tab">
-                        <x-adminlte-datatable id="subscriptionsTable" :heads="['ID', 'Fecha Inicio', 'Fecha Fin', 'Estatus']" :config="$config">
-                            @foreach($usuario->historial_suscripcion as $suscripcion)
-                                <tr>
-                                    <td>{{ $suscripcion->suscripcion_id }}</td>
-                                    <td>{{ $suscripcion->fecha_inicio }}</td>
-                                    <td>{{ $suscripcion->fecha_fin }}</td>
-                                    <td>{{ $suscripcion->estatus }}</td>
-                                </tr>
-                            @endforeach
-                        </x-adminlte-datatable>
+                        @component('sistema.user.profile-suscripciones', ['usuario' => $usuario])
+                        @endcomponent
                     </div>
                 </div>
+                @endif
             </div>
         </div>
     </div>
@@ -145,9 +88,12 @@
 
 @section('css')
     {{-- Add here extra stylesheets --}}
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 @stop
 
 @section('js')
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script>
         $(document).ready(function() {
             $('#loading').css('display', 'flex');

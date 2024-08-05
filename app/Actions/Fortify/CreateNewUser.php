@@ -49,6 +49,14 @@ class CreateNewUser implements CreatesNewUsers
             //     $user->delete(); 
             //     throw $th; 
             // }
+
+            try {
+                $user->roles()->sync(2); 
+            } catch (\Throwable $th) {
+                $user->delete(); 
+                throw $th; 
+            }
+
             return $user;
         });
     }

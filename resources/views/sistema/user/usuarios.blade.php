@@ -1,15 +1,12 @@
 @extends('adminlte::page')
 
-@section('title', 'Usuarios')
+@section('title', 'Impulso trans - Usuarios')
 
 @section('content_header')
-    <div class="d-flex justify-content-between">
-        <h1>Usuarios</h1>
-                            
-        @can('Crear Usuario')
+        <h1></h1>             
+        {{-- @can('Crear Usuario')
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newUsuarioModal"><i class="fa fa-plus" aria-hidden="true"></i> Usuario</button>
-        @endcan
-    </div>
+        @endcan --}}
 @stop
 
 @section('content')
@@ -26,25 +23,24 @@
 
     <div id="content">
         <div class="card">
+            <div class="card-header">
+                <h1>Usuarios</h1>
+            </div>   
             <div class="card-body">
-                @if (session('success') == 'Usuario creado')
-                    <x-adminlte-alert theme="success" title="Usuario creado" id="success-alert">
-                        Usuario creado correctamente.
-                    </x-adminlte-alert>
-                @elseif (session('success') == 'Usuario eliminado')
-                    <x-adminlte-alert theme="success" title="Usuario eliminado" id="success-alert">
-                        Usuario eliminado correctamente.
-                    </x-adminlte-alert>
-                @elseif (session('success') == 'Usuario actualizado')
-                    <x-adminlte-alert theme="success" title="Usuario actualizado" id="success-alert">
-                        Usuario actualizado correctamente.
-                    </x-adminlte-alert>
+                @if (session('success'))
+                    <x-adminlte-alert theme="success" title="Info" id="success-alert">
+                        {{ session('success') }}
+                    </x-adminlte-alert>             
                 @elseif (session('error'))
-                    <x-adminlte-alert theme="danger" title="Error" id="error-alert">
-                        Error al guardar el Usuario.
+                    <x-adminlte-alert theme="danger" title="Hubo un error" id="error-alert">
+                        {{ session('error') }}
+                    </x-adminlte-alert>
+                @elseif (session('info'))
+                    <x-adminlte-alert theme="info" title="Alerta" id="info-alert">
+                        {{session('info')}}
                     </x-adminlte-alert>
                 @endif
-
+                @if (sizeof($usuarios) > 0)
                 @php
                     $heads = [
                         'ID',
@@ -64,10 +60,12 @@
                             'url' => '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
                             ],
                         'columns' => [null, null, null,  ['orderable' => false], ['orderable' => false]],
+                        "lengthMenu" => [25, 50, 100, 500],
+                        
                     ];
                 @endphp
 
-                    <x-adminlte-datatable id="table1" :heads="$heads" :config="$config">
+                    <x-adminlte-datatable id="table1" :heads="$heads" :config="$config" hoverable with-buttons compressed>
                         @foreach($usuarios as $usuario)
                             <tr>
                                 <td>{{ $usuario->id }}</td>
@@ -77,6 +75,7 @@
                                     @foreach ($usuario->roles as $rol)
                                         <span class="badge badge-info">{{ $rol->name }}</span>
                                     @endforeach
+                                </td>
                                 <td>
                                     {{-- ir a perfil --}}
                                     <a href="{{ route('usuarios.show', $usuario->id) }}" class="btn btn-xs btn-default text-primary mx-1 shadow" title="Perfil">
@@ -101,6 +100,7 @@
                             </tr>
                         @endforeach
                     </x-adminlte-datatable>
+                @endif
             </div>
         </div>
 
@@ -170,11 +170,15 @@
     </div>
 @stop
 
+
 @section('css')
     {{-- Add here extra stylesheets --}}
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 @stop
 
 @section('js')
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script>
         $(document).ready(function() {
             $('#loading').css('display', 'flex');
