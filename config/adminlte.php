@@ -110,7 +110,7 @@ return [
     */
 
     'preloader' => [
-        'enabled' => true,
+        'enabled' => false,
         'mode' => 'fullscreen',
         'img' => [
             'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
@@ -330,7 +330,7 @@ return [
         ],
         ['header' => 'Gestion'],
         [
-            'text' => 'Aserorias',
+            'text' => 'Asesorias',
             'url' => 'asesorias',
             'icon' => 'fas fa-fw fa-calendar',
         ],
@@ -510,6 +510,16 @@ return [
                     'type' => 'js',
                     'asset' => false,
                     'location' => '//cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js',
+                ],
+            ],
+        ],
+        'Tailwind' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => '//cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css',
                 ],
             ],
         ],

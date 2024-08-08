@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\enums\PagoStatusEnum;
+use App\enums\SuscripcionStatusEnum;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Suscripcion;
 use Illuminate\Support\Facades\Log;
 use App\Lib\Constants;
+use App\Models\Pago;
+use Illuminate\Support\Facades\DB;
 
 class SuscripcionController extends Controller
 {
@@ -48,7 +52,9 @@ class SuscripcionController extends Controller
             }
 
 
-            return view('sistema.suscripcion', compact('suscripciones', 'filter'));
+            $pagos = Pago::all();
+
+            return view('sistema.suscripcion', compact('suscripciones', 'filter', 'pagos'));
         } catch (\Exception $e) {
             Log::error('Error displaying suscripciones: ' . $e->getMessage());
             $request->session()->flash('error', Constants::GENERICOS['ERROR']);
@@ -58,19 +64,32 @@ class SuscripcionController extends Controller
 
     public function actualizarSuscripcion(Request $request)
     {
+
+        DB::beginTransaction();
         try {
+            $action = $request->query('action');
             $suscripcion = Suscripcion::find($request->id);
 
             if ($suscripcion == null) {
-                return response()->json(['error' => Constants::SUSCRIPCIONES_MENSAJES['SUSCRIPCION_NO_ENCONTRADA']], 404);
+                return redirect()->route('suscripciones.index')->with('error', Constants::SUSCRIPCIONES_MENSAJES['SUSCRIPCION_NO_ENCONTRADA']);
             }
 
-            $suscripcion->estatus = $request->estatus;
+            $suscripcion->estatus = SuscripcionStatusEnum::Vencida;
             $suscripcion->save();
-            return response()->json(['message' => Constants::GENERICOS['ACTUALIZADO']], 200);
+
+
+            $user_id = $suscripcion->usuario_id;
+            $pago = Pago::where('usuario_id', $user_id)->first();
+            $pago->validado = PagoStatusEnum::Expirado;
+            $pago->save();
+
+
+            DB::commit();
+            return redirect()->route('suscripciones.index')->with('success', Constants::SUSCRIPCIONES_MENSAJES['SUSCRIPCION_ACTUALIZADA']);
         } catch (\Exception $e) {
+            DB::rollBack();
             Log::error('Error updating suscripción: ' . $e->getMessage());
-            return response()->json(['error' => Constants::GENERICOS['ERROR']], 500);
+            return redirect()->route('suscripciones.index')->with('error', Constants::GENERICOS['ERROR']);
         }
     }
 }

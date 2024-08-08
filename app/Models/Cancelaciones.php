@@ -5,22 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Asesoria extends Model
+class Cancelaciones extends Model
 {
     use HasFactory;
-    use HasFactory;
-    protected $table = 'asesorias';
+
+    protected $table = 'cancelaciones';
     protected $primaryKey = 'id';
+    //timestamps false
+    public $timestamps = false;
 
     protected $fillable = [
         'id_user',
-        'motivo',
-        'estatus',
-        'notas',
-        'id_estado_nacimiento',
-        'link',
-        'fecha_cita',
-        'canceladas'
+        'total'
     ];
 
     public function user()

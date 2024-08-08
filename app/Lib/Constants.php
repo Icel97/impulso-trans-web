@@ -20,6 +20,7 @@ class Constants
     const SUSCRIPCIONES_MENSAJES = [
         "SUSCRIPCION_NO_ENCONTRADA" => "Suscripción no encontrada",
         "NO_HAY_SUSCRIPCIONES" => "No hay suscripciones para mostrar",
+        "SUSCRIPCION_ACTUALIZADA" => "Suscripción ha sido finalizada",
     ];
 
 

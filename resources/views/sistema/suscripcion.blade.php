@@ -42,20 +42,16 @@
                             href="{{ route('suscripciones.index', ['filter' => 'all']) }}">Todos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ $filter === 'pending' ? 'active' : '' }}"
-                            href="{{ route('suscripciones.index', ['filter' => 'pending']) }}">Pendientes</a>
+                        <a class="nav-link {{ $filter === 'inactive' ? 'inactive' : '' }}"
+                            href="{{ route('suscripciones.index', ['filter' => 'review']) }}">Inactivos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ $filter === 'review' ? 'active' : '' }}"
-                            href="{{ route('suscripciones.index', ['filter' => 'review']) }}">Por revisar</a>
+                        <a class="nav-link {{ $filter === 'active' ? 'active' : '' }}"
+                            href="{{ route('suscripciones.index', ['filter' => 'active']) }}">Activos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ $filter === 'approved' ? 'active' : '' }}"
-                            href="{{ route('suscripciones.index', ['filter' => 'approved']) }}">Aprobados</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ $filter === 'rejected' ? 'active' : '' }}"
-                            href="{{ route('suscripciones.index', ['filter' => 'rejected']) }}">Rechazados</a>
+                        <a class="nav-link {{ $filter === 'expired' ? 'expired' : '' }}"
+                            href="{{ route('suscripciones.index', ['filter' => 'approved']) }}">Vencidos</a>
                     </li>
                 </ul>
 
@@ -71,6 +67,80 @@
                     <x-adminlte-alert theme="info" title="Alerta" id="info-alert">
                         {{ session('info') }}
                     </x-adminlte-alert>
+                @endif
+
+                @if (sizeof($suscripciones) > 0)
+                    @php
+                        $heads = [
+                            'ID',
+                            'Usuario',
+                            'inicio MM/DD/YY',
+                            'fin MM/DD/YY',
+                            'Estado',
+                            ['label' => 'Acciones', 'no-export' => true, 'width' => 8],
+                        ];
+                        $config = [
+                            'language' => [
+                                'url' => '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json',
+                            ],
+                            'order' => [[1, 'desc']],
+                            'columns' => [null, null, null, ['orderable' => false], ['orderable' => false]],
+                            'lengthMenu' => [25, 50, 100, 500],
+                        ];
+                    @endphp
+                    <x-adminlte-datatable id="table1" :heads="$heads" :config="$config" hoverable with-buttons
+                        compressed>
+                        @foreach ($suscripciones as $s)
+                            @php
+                                $status = $s->estatus->value;
+                                $rowClass = '';
+                                if ($status == 'Activa') {
+                                    $rowClass = 'text-success';
+                                } elseif ($status == 'Inactiva') {
+                                    $rowClass = 'text-danger';
+                                } else {
+                                    $rowClass = '';
+                                }
+                            @endphp
+                            <tr class="{{ $rowClass }}">
+                                <td>{{ $s->id }}</td>
+                                <td>{{ $s->user->email }}</td>
+                                <td>{{ $s->fecha_inicio }}</td>
+                                <td>{{ $s->fecha_fin }}</td>
+                                <td>
+                                    @if ($status == 'Activa')
+                                        <span class="badge badge-success">{{ $status }}</span>
+                                    @elseif ($status == 'Inactiva')
+                                        <span class="badge badge-danger">{{ $status }}</span>
+                                    @else
+                                        <span class="badge badge-warning">{{ $status }}</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <div class="flex justify-content-center">
+
+                                        @if ($s->estatus->value === 'Activa')
+                                            <form action="{{ route('suscripciones.actualizarSuscripcion') }}"
+                                                method="post" class="formValidar d-flex">
+                                                @csrf
+                                                <input type="hidden" name="action" id="action-{{ $s->id }}">
+                                                <input type="hidden" name="id" value="{{ $s->id }}">
+                                                <button type="submit"
+                                                    class="btn btn-md btn-default text-danger mx-1 btn-reject"
+                                                    title="Rechazar">
+                                                    <i class="fas fa-lg fa-times"></i>
+                                                </button>
+                                            </form>
+                                    </div>
+                                @else
+                                    <div class="flex justify-content-center">
+                                        <p>-</p>
+                                    </div>
+                        @endif
+                        </td>
+                        </tr>
+                @endforeach
+                </x-adminlte-datatable>
                 @endif
 
             </div>
@@ -119,12 +189,12 @@
 
                 Swal.fire({
                     title: '¿Estás seguro?',
-                    text: action === 'accepted' ? "Validar pago" : "Rechazar pago",
+                    text: "El pago se marcará como completado.",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: action === 'accepted' ? '¡Sí, validar!' : '¡Sí, rechazar!'
+                    confirmButtonText: '¡Sí, rechazar!'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         this.submit();

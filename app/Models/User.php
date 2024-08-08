@@ -62,7 +62,7 @@ class User extends Authenticatable
     ];
 
 
- /**
+    /**
      * Get the URL to the user's profile photo.
      *
      * @return string
@@ -93,13 +93,17 @@ class User extends Authenticatable
     {
         return $this->hasMany(Historial_Suscripcion::class, 'usuario_id', 'id');
     }
-    
-    public function pago() 
-    { 
-        return $this->hasOne(Pago::class, 'usuario_id', 'id'); 
+
+    public function pago()
+    {
+        return $this->hasOne(Pago::class, 'usuario_id', 'id');
     }
     public function historial_pago()
     {
         return $this->hasMany(Historial_Pago::class, 'usuario_id', 'id');
+    }
+    public function cancelacion()
+    {
+        return $this->hasOne(Cancelaciones::class, 'id_user', 'id');
     }
 }
