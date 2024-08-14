@@ -157,10 +157,6 @@
                 $('#content').show();
             });
 
-            @if ($errors->any())
-                $('#newProductModal').modal('show');
-            @endif
-
             // Hide alerts after 5 seconds
             setTimeout(function() {
                 $('#success-alert').fadeOut('slow');
@@ -215,4 +211,11 @@
             });
         });
     </script>
+    @if ($errors->any())
+        <script>
+            $(document).ready(function() {
+                $('#newProductModal').modal('show');
+            });
+        </script>
+    @endif
 @stop
