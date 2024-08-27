@@ -76,7 +76,7 @@
                     
                     $config = [
                         'language'=> [
-                            'url' => '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+                            'url' => '/js/lang/es-ES.json'
                                 ],
                                 'order' => [[1, 'desc']],
                         "columns" => [null, null, null, ['orderable' => false], ['orderable' => false]],

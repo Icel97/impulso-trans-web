@@ -1,0 +1,125 @@
+/* Estilos básicos de la página */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+}
+
+.background-container {
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+.wave-container {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 25%;
+}
+
+/* Estilos para el navbar */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: transparent; /* Empieza transparente */
+    padding: 1vh 10vw;
+    display: flex;
+    justify-content: space-between; /* Distribuye el logo y los enlaces */
+    align-items: center;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.navbar.scrolled {
+    background-color: #F298C1; /* Cambia a gris con un poco de transparencia al hacer scroll */
+}
+
+.navbar-logo .logo {
+    height: 50px; /* Ajusta el tamaño del logo según sea necesario */
+}
+
+.navbar-links a {
+    margin: 0 15px;
+    text-decoration: none;
+    color: #1E1A31; /* Color de texto blanco cuando el navbar es transparente */
+    font-family: "League Spartan", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 800;
+    font-style: normal;
+    font-size: 1.4em;
+    transition: color 0.3s ease;
+}
+
+.navbar-logo .logo {
+    height: 7vh; /* Ajusta el tamaño del logo según sea necesario */
+}
+
+.navbar.scrolled .navbar-links a {
+    color: #F8F7F7; /* Cambia a gris oscuro cuando el navbar se vuelve gris */
+}
+
+/* Estilos para el footer */
+.footer {
+    background-color: #333;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.footer-content {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.footer-links {
+    margin-top: 10px;
+}
+
+.footer-links a {
+    color: #fff;
+    margin: 0 10px;
+    text-decoration: none;
+}
+
+.footer-links a:hover {
+    text-decoration: underline;
+}
+
+/* Estilos para las secciones */
+
+/* Estilos para las secciones */
+section {
+    padding: 10vh 3vw;
+    min-height: 100vh;
+    position: relative;
+}
+
+#inicio {
+    background-color: #F8F7F7;
+}
+
+#blog {
+    background-color: #F8F7F7;
+}
+
+#guias {
+    background-color: #69BCEA;
+}
+
+#programas {
+    background-color: #F8F7F7;
+}
+
+#eventos {
+    background-color: #69BCEA;
+}
+
+#contacto {
+    background-color: #F8F7F7;
+}
