@@ -1,38 +1,6 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Laravel</title>
+@extends('layouts.public')
 
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@800&display=swap" rel="stylesheet">
-
-    <!-- Incluir CSS -->
-    <link rel="stylesheet" href="{{ asset('css/tailwindcss.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/public.css') }}">
-    
-</head>
-<body>
-
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="navbar-logo">
-            <img src="{{ asset('images/public/logo.png') }}" alt="Logo" class="logo">
-        </div>
-        <div class="navbar-links">
-            <a href="#inicio">Inicio</a>
-            <a href="#blog">Blog</a>
-            <a href="#guias">Guías</a>
-            <a href="#programas">Programas</a>
-            <a href="#eventos">Eventos</a>
-            <a href="#contacto">Contacto</a>
-        </div>
-    </nav>
-
+@section('content')
     <!-- Secciones -->
     <div id="inicio">
             
@@ -46,56 +14,42 @@
         </div>
     </div>
 
-    <section id="blog">
-        <h2>Blog</h2>
-        <p>Contenido del Blog.</p>
-    </section>
-
-    <section id="guias">
-        <h2>Guías</h2>
-        <p>Contenido de las Guías.</p>
-    </section>
-
-    <section id="programas">
+<!-- Programas -->
+<section id="programas" class="mt-5">
+    <div class="container">
         <h2>Programas</h2>
-        <p>Contenido de los Programas.</p>
-    </section>
+        <p>Información sobre nuestros programas de apoyo.</p>
+    </div>
+</section>
 
-    <section id="eventos">
+<!-- Eventos -->
+<section id="eventos" class="mt-5">
+    <div class="container">
         <h2>Eventos</h2>
-        <p>Contenido de los Eventos.</p>
-    </section>
+        <p>Conoce nuestros próximos eventos.</p>
+    </div>
+</section>
+    <!-- Mapa de Documentación Estatal -->
+<section id="mapa" class="mt-5">
+    <div class="container">
+        <h2>Mapa de Documentación Estatal</h2>
+        <p>Consulta los documentos necesarios por estado.</p>
+        <!-- Aquí se incluiría el mapa interactivo -->
+    </div>
+</section>
+
+<!-- Testimonios -->
+<section id="testimonios" class="mt-5">
+    <div class="container">
+        <h2>Testimonios</h2>
+        <p>Lee lo que otros tienen que decir.</p>
+    </div>
+</section>
 
     <section id="contacto">
         <h2>Contacto</h2>
         <p>Información de Contacto.</p>
     </section>
+@endsection
 
-    <footer class="footer">
-        <div class="footer-content">
-            <p>&copy; 2024 Tu Empresa. Todos los derechos reservados.</p>
-            <div class="footer-links">
-                <a href="#inicio">Inicio</a>
-                <a href="#blog">Blog</a>
-                <a href="#guias">Guías</a>
-                <a href="#programas">Programas</a>
-                <a href="#eventos">Eventos</a>
-                <a href="#contacto">Contacto</a>
-                @if (Route::has('login'))
-                    @auth
-                        <a href="{{ url('/dashboard') }}">Administrar</a>
-                    @else
-                        <a href="{{ route('login') }}">Iniciar sesión</a>
-                    @if (Route::has('register'))
-                        <a href="{{ route('register') }}">Registarse</a>
-                    @endif
-                @endauth
-            @endif
-            </div>
-        </div>
-    </footer>
-
-    <!-- Incluir JS -->
-    <script src="{{ asset('js/public.js') }}"></script>
-</body>
-</html>
+    
