@@ -8,6 +8,11 @@ use App\Http\Controllers\PermisoController;
 use App\Http\Controllers\PagoController; 
 use App\Http\Controllers\SuscripcionController;
 use App\Http\Controllers\AsignarController;
+use App\Http\Controllers\TextoController;
+use App\Http\Controllers\MapaController;
+use App\Models\WebsiteText;
+use App\Models\PointOfInterest;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -21,7 +26,10 @@ use App\Http\Controllers\AsignarController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    //pasar los textos de los programas
+    $programas = WebsiteText::where('section', 'programas')->get();
+    $points = PointOfInterest::all();
+    return view('welcome', compact('programas', 'points'));
 });
 
 Route::middleware([
@@ -36,8 +44,9 @@ Route::middleware([
     Route::resource('/productos', ProductoController::class)->names('productos');
     Route::resource('/roles', RolController::class)->names('roles');
     Route::resource('/permisos', PermisoController::class)->names('permisos');
-
-
+    Route::resource('/texto', TextoController::class)->names('texto');
+    Route::put('/textos', [TextoController::class, 'update'])->name('texts.update');
+    Route::resource('/puntos', MapaController::class)->names('puntos');
     #pagos
     Route::get('/pagos', [PagoController::class, 'index'])->name('pagos.index'); 
     Route::get('/pagos/comprobante/{id}', [PagoController::class, 'displayPhoto'])->name("pagos.displayPhoto");
@@ -45,11 +54,7 @@ Route::middleware([
     #suscripciones
     Route::get('/suscripciones', [SuscripcionController::class, 'index'])->name("suscripciones.index");
     Route::post('/suscripciones/actualizar', [SuscripcionController::class, 'actualizarSuscripcion'])->name("suscripciones.actualizarSuscripcion"); 
-    
-
-
     Route::resource('/usuarios', AsignarController::class)->names('usuarios');
-
     // Agregar la ruta específica para roles.permisos
     Route::get('/roles/{role}/permisos', [RolController::class, 'permisos'])->name('roles.permisos');
     // Agregar la ruta específica para roles.permisos.asignarPermisos

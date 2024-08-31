@@ -1,8 +1,8 @@
 @extends('layouts.public')
 
 @section('content')
-    <!-- Secciones -->
-    <div id="inicio">
+    <!-- Inicio -->
+<div id="inicio">
             
         <div class="background-container" style="background-image: url('{{ asset('images/public/inicio.jpg') }}');">
             <!-- Aquí puedes colocar contenido adicional para la sección de Inicio -->
@@ -12,44 +12,61 @@
                 </svg>
             </div>
         </div>
-    </div>
+</div>
 
 <!-- Programas -->
-<section id="programas" class="mt-5">
+<section id="programas">
     <div class="container">
         <h2>Programas</h2>
-        <p>Información sobre nuestros programas de apoyo.</p>
+        <div class="mt-5">
+            <div class="row">
+            @foreach($programas as $programa)
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <img src="{{ $programa->url_img }}" class="card-img-top" alt="{{ $programa->nombre }}" style="height: 200px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $programa->title }}</h5>
+                            <p class="card-text">{{ $programa->content }}</p>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+                
+            </div>
+        </div>
     </div>
 </section>
 
 <!-- Eventos -->
-<section id="eventos" class="mt-5">
+<section id="eventos">
     <div class="container">
         <h2>Eventos</h2>
         <p>Conoce nuestros próximos eventos.</p>
     </div>
 </section>
     <!-- Mapa de Documentación Estatal -->
-<section id="mapa" class="mt-5">
+<section id="mapa">
     <div class="container">
-        <h2>Mapa de Documentación Estatal</h2>
-        <p>Consulta los documentos necesarios por estado.</p>
-        <!-- Aquí se incluiría el mapa interactivo -->
+        <h2 class="mb-5">Mapa de Documentación Estatal</h2>
+        <!-- Contenedor del Mapa -->
+        <div id="map" style="height: 70vh;"></div>
     </div>
 </section>
 
 <!-- Testimonios -->
-<section id="testimonios" class="mt-5">
+<section id="testimonios">
     <div class="container">
         <h2>Testimonios</h2>
         <p>Lee lo que otros tienen que decir.</p>
     </div>
 </section>
 
-    <section id="contacto">
+<!-- Vontacto -->
+<section id="contacto">
         <h2>Contacto</h2>
         <p>Información de Contacto.</p>
-    </section>
+</section>
 @endsection
+
 
     

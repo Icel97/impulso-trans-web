@@ -360,6 +360,24 @@ return [
             'route' => 'permisos.index',
             'icon' => 'fas fa-fw fa-key',
         ],
+        ['header' => 'Pagina web'],
+        [
+            'text' => 'textos',
+            'route' => 'texto.index',
+            'icon' => 'fas fa-fw fa-file',
+        ],
+        [
+            'text' => 'imagenes',
+            'route' => 'permisos.index',
+            'icon' => 'fas fa-fw fa-image',
+        ],
+        [
+            'text' => 'Mapa',
+            'route' => 'puntos.index',
+            'icon' => 'fas fa-fw fa-map-marker',
+        ],
+        
+        
     ],
 
     /*

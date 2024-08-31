@@ -1,11 +1,4 @@
 /* Estilos básicos de la página */
-body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    font-family: Arial, sans-serif;
-}
-
 .background-container {
     background-size: cover;
     background-position: center;
@@ -104,19 +97,19 @@ section {
     background-color: #F8F7F7;
 }
 
-#blog {
-    background-color: #F8F7F7;
-}
-
-#guias {
-    background-color: #69BCEA;
-}
-
 #programas {
     background-color: #F8F7F7;
 }
 
 #eventos {
+    background-color: #69BCEA;
+}
+
+#mapa {
+    background-color: #F8F7F7;
+}
+
+#testimonios {
     background-color: #69BCEA;
 }
 
