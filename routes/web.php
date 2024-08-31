@@ -39,22 +39,23 @@ Route::middleware([
     Route::resource('/permisos', PermisoController::class)->names('permisos');
 
 
-    #pagos
+    Route::middleware(['role:Administrador'])->group(function () {
+
+        Route::get('/suscripciones', [SuscripcionController::class, 'index'])->name("suscripciones.index");
+        Route::post('/suscripciones/actualizar', [SuscripcionController::class, 'actualizarSuscripcion'])->name("suscripciones.actualizarSuscripcion");
+    });
+
     Route::get('/pagos', [PagoController::class, 'index'])->name('pagos.index');
-    Route::get('/pagos/comprobante/{id}', [PagoController::class, 'displayPhoto'])->name("pagos.displayPhoto");
+    Route::get('/pagos/comprobante/{id}', [PagoController::class, 'displayPhoto'])->middleware(['role:Administrador'])->name("pagos.displayPhoto");
     Route::post('/pagos/validar', [PagoController::class, 'validarPago'])->name('pagos.validarPago');
-    #suscripciones
+
     Route::get('/suscripciones', [SuscripcionController::class, 'index'])->name("suscripciones.index");
     Route::post('/suscripciones/actualizar', [SuscripcionController::class, 'actualizarSuscripcion'])->name("suscripciones.actualizarSuscripcion");
-    #asesorias 
+
     Route::get('/asesorias', [AsesoriaController::class, 'index'])->name('asesorias.index');
-
-
 
     Route::resource('/usuarios', AsignarController::class)->names('usuarios');
 
-    // Agregar la ruta específica para roles.permisos
     Route::get('/roles/{role}/permisos', [RolController::class, 'permisos'])->name('roles.permisos');
-    // Agregar la ruta específica para roles.permisos.asignarPermisos
     Route::put('/roles/{role}/asignarPermisos', [RolController::class, 'asignarPermisos'])->name('roles.asignarPermisos');
 });

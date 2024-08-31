@@ -322,11 +322,11 @@ return [
         //     'label' => 4,
         //     'label_color' => 'success',
         // ],
-        ['header' => 'Confirguración'],
+
         [
-            'text' => 'profile',
-            'url' => 'profile',
-            'icon' => 'fas fa-fw fa-user',
+            'text' => 'Dashboard',
+            'url' => 'dashboard',
+            'icon' => 'fas fa-fw fa-chart-line',
         ],
         ['header' => 'Gestion'],
         [
@@ -335,11 +335,11 @@ return [
             'icon' => 'fas fa-fw fa-calendar',
         ],
         ['header' => 'Afiliación'],
-        [
-            'text' => 'Productos',
-            'url' => 'productos',
-            'icon' => 'fas fa-fw fa-share',
-        ],
+        // [
+        //     'text' => 'Productos',
+        //     'url' => 'productos',
+        //     'icon' => 'fas fa-fw fa-share',
+        // ],
         [
             'text' => 'Pagos',
             'url' => 'pagos',
@@ -365,6 +365,12 @@ return [
             'text' => 'Permisos',
             'route' => 'permisos.index',
             'icon' => 'fas fa-fw fa-key',
+        ],
+        ['header' => 'Confirguración'],
+        [
+            'text' => 'profile',
+            'url' => 'profile',
+            'icon' => 'fas fa-fw fa-user',
         ],
     ],
 

@@ -2,11 +2,8 @@
 
 namespace App\lib;
 
-
-// Pagos constants
 class Constants
 {
-
     const PAGO_MENSAJES = [
         "MOSTRAR_TODOS" => "Error al mostrar los pagos",
         "NO_HAY_PAGOS" => "No hay pagos para mostrar",
@@ -30,7 +27,6 @@ class Constants
         "USUARIO_CREADO" => "Usuario creado correctamente",
         "ERROR_ACTUALIZAR_ROLES" => "Error al actualizar los roles del usuario",
         "ROLES_ASIGNADOS" => "Roles asignados",
-
     ];
 
     const GENERICOS = [

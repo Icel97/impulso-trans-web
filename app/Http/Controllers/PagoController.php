@@ -12,6 +12,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Lib\Constants;
+use Illuminate\Contracts\Session\Session;
 
 class PagoController extends Controller
 {
@@ -56,7 +57,7 @@ class PagoController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'comprobante_url' => 'required|file', // Ensure it is a file
+                'comprobante_url' => 'required|file',
             ]);
 
             if ($validator->fails()) {
@@ -71,18 +72,18 @@ class PagoController extends Controller
 
             $user = User::find($request->user_id);
             $userId = $user->id;
-            // create hash of 5 characters based on user id 
             $fileName = $date . '_' . $userId . "_pago." . $request->file('comprobante_url')->extension();
 
             $pago = Pago::where('usuario_id', $request->user_id)->first();
 
             if ($pago) {
                 $estatus = $pago->validado;
-                if ($estatus === PagoStatusEnum::Pendiente) {
+                if ($estatus === PagoStatusEnum::Pendiente || $estatus === PagoStatusEnum::Expirado) {
                     $pago->comprobante_url = $fileName;
                     $pago->validado = PagoStatusEnum::Revision;
                     $pago->fecha_envio = now();
                     $pago->save();
+                    $request->file('comprobante_url')->storeAs('public/pagos/' . date('Y'), $fileName);
                     return response()->json(['success' => Constants::PAGO_MENSAJES["PAGO_ENVIADO"]], 200);
                 }
                 return response()->json(['error' => Constants::PAGO_MENSAJES["PAGO_YA_ENVIADO"]], 400);
@@ -143,7 +144,7 @@ class PagoController extends Controller
         }
     }
 
-    public function displayPhoto($id)
+    public function displayPhoto(Request $req, $id)
     {
         try {
             $pago = Pago::findOrFail($id);
@@ -151,13 +152,18 @@ class PagoController extends Controller
             $filePath = storage_path('app/public/pagos/' . date('Y') . '/' . $pago->comprobante_url);
 
             if (!Storage::disk('public')->exists('pagos/' . date('Y') . '/' . $pago->comprobante_url)) {
-                return redirect()->back()->with('error', Constants::GENERICOS["ARCHIVO_NO_ENCONTRADO"]);
+                $req->session()->flash('error', Constants::GENERICOS["ERROR"]);
+
+                $pagos = Pago::whereNot('validado', 'Pendiente')->orderBy('created_at', 'desc')->get();
+                return view("sistema.pago", ['error' => Constants::GENERICOS["ERROR"], 'pagos' => $pagos, 'filter' => 'all']);
             }
 
             return response()->file($filePath);
         } catch (\Exception $e) {
             Log::error('Error displaying photo: ' . $e->getMessage());
-            return redirect()->back()->with('error', Constants::GENERICOS["ERROR"]);
+            $pagos = Pago::whereNot('validado', 'Pendiente')->orderBy('created_at', 'desc')->get();
+            $req->session()->flash('error', Constants::GENERICOS["ERROR"]);
+            return view("sistema.pago", ['error' => Constants::GENERICOS["ERROR"], 'pagos' => $pagos, 'filter' => 'all']);
         }
     }
 }

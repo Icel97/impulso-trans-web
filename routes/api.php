@@ -4,6 +4,7 @@ use App\Http\Controllers\AsesoriaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PagoController;
+use App\Http\Controllers\MetricasController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -24,6 +25,14 @@ Route::post('/pagos', [PagoController::class, 'createPago']);
 
 
 Route::post("/asesorias", [AsesoriaController::class, 'create']);
-//get one 
 Route::get("/asesorias/{id}", [AsesoriaController::class, 'show']);
 Route::post("/asesorias/update", [AsesoriaController::class, 'actualizar'])->name('asesorias.actualizar');
+
+
+Route::get("/metricas/afiliaciones", [MetricasController::class, 'afiliaciones'])->name('metricas.afiliaciones');
+Route::get("/metricas/citas", [MetricasController::class, 'citas'])->name('metricas.citas');
+Route::get("/metricas/usuario_residencia", [MetricasController::class, 'usuario_residencia'])->name('metricas.usuario_residencia');
+Route::get("/metricas/usuario_identidades", [MetricasController::class, 'usuario_identidades'])->name('metricas.usuario_identidades');
+Route::get("/metricas/usuario_pronombres", [MetricasController::class, 'usuario_pronombres'])->name('metricas.usuario_pronombres');
+Route::get("/metricas/usuario_afro_indigena", [MetricasController::class, 'usuario_afro_indigena'])->name('metricas.usuario_afro_indigena');
+Route::get("/metricas/usuarios_afiliados", [MetricasController::class, 'usuarios_afiliados'])->name('metricas.usuarios_afiliados');

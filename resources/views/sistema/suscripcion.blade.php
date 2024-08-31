@@ -74,8 +74,8 @@
                         $heads = [
                             'ID',
                             'Usuario',
-                            'inicio MM/DD/YY',
-                            'fin MM/DD/YY',
+                            'Inicio MM/DD/YY',
+                            'Fin MM/DD/YY',
                             'Estado',
                             ['label' => 'Acciones', 'no-export' => true, 'width' => 8],
                         ];
@@ -84,12 +84,12 @@
                                 'url' => '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json',
                             ],
                             'order' => [[1, 'desc']],
-                            'columns' => [null, null, null, ['orderable' => false], ['orderable' => false]],
+                            'columns' => [null, null, null, null, ['orderable' => false], ['orderable' => false]],
                             'lengthMenu' => [25, 50, 100, 500],
                         ];
                     @endphp
-                    <x-adminlte-datatable id="table1" :heads="$heads" :config="$config" hoverable with-buttons
-                        compressed>
+                    <x-adminlte-datatable id="table-suscripciones" :heads="$heads" :config="$config" hoverable
+                        with-buttons compressed>
                         @foreach ($suscripciones as $s)
                             @php
                                 $status = $s->estatus->value;
@@ -117,32 +117,28 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <div class="flex justify-content-center">
+                                    @if ($status === 'Activa')
+                                        <form action="{{ route('suscripciones.actualizarSuscripcion') }}" method="post"
+                                            class="formValidar d-flex">
+                                            @csrf
+                                            <input type="hidden" name="action" id="action-{{ $s->id }}">
+                                            <input type="hidden" name="id" value="{{ $s->id }}">
+                                            <button type="submit"
+                                                class="btn btn-md btn-default text-danger mx-1 btn-reject" title="Rechazar">
+                                                <i class="fas fa-lg fa-times"></i>
+                                            </button>
+                                        </form>
+                                    @else
+                                        <div class="flex justify-content-center">
+                                            <p>-</p>
+                                        </div>
+                                    @endif
+                                </td>
 
-                                        @if ($s->estatus->value === 'Activa')
-                                            <form action="{{ route('suscripciones.actualizarSuscripcion') }}"
-                                                method="post" class="formValidar d-flex">
-                                                @csrf
-                                                <input type="hidden" name="action" id="action-{{ $s->id }}">
-                                                <input type="hidden" name="id" value="{{ $s->id }}">
-                                                <button type="submit"
-                                                    class="btn btn-md btn-default text-danger mx-1 btn-reject"
-                                                    title="Rechazar">
-                                                    <i class="fas fa-lg fa-times"></i>
-                                                </button>
-                                            </form>
-                                    </div>
-                                @else
-                                    <div class="flex justify-content-center">
-                                        <p>-</p>
-                                    </div>
-                        @endif
-                        </td>
-                        </tr>
-                @endforeach
-                </x-adminlte-datatable>
+                            </tr>
+                        @endforeach
+                    </x-adminlte-datatable>
                 @endif
-
             </div>
         </div>
     </div>

@@ -73,6 +73,9 @@
                     </x-adminlte-alert>
                 @endif
 
+                {{ session('error ') }}
+
+
                 @if (sizeof($pagos) > 0)
                     @php
                         $heads = [
@@ -91,7 +94,7 @@
                             'lengthMenu' => [25, 50, 100, 500],
                         ];
                     @endphp
-                    <x-adminlte-datatable id="table1" :heads="$heads" :config="$config" hoverable with-buttons
+                    <x-adminlte-datatable id="table-pagos" :heads="$heads" :config="$config" hoverable with-buttons
                         compressed>
                         @foreach ($pagos as $pago)
                             @php
@@ -115,7 +118,7 @@
                                 <td>{{ $pago->user->email }}</td>
                                 <td>{{ $pago->validado }}</td>
                                 <td>
-                                    @if ($pago->validado->value !== 'Pendiente')
+                                    @if ($status !== 'Pendiente')
                                         <form action="{{ route('pagos.validarPago') }}" method="post"
                                             class="formValidar d-flex">
                                             <a href="{{ route('pagos.displayPhoto', $pago->id) }}"
@@ -126,7 +129,7 @@
                                             @csrf
                                             <input type="hidden" name="action" id="action-{{ $pago->id }}">
                                             <input type="hidden" name="id" value="{{ $pago->id }}">
-                                            @if ($pago->validado->value !== 'Aprobado' && $pago->validado->value !== 'Rechazado')
+                                            @if ($status !== 'Aprobado' && $status !== 'Rechazado' && $status !== 'Expirado')
                                                 <button type="submit"
                                                     class="btn btn-md btn-default text-primary mx-1 btn-validate"
                                                     title="Validar" {{ $turnOffActionValidar ? 'disabled' : '' }}>

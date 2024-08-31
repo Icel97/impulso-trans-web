@@ -1,11 +1,12 @@
 <div class="card w-100" style="margin:0 !important">
-    <div >
+    <div>
         <div class="d-flex flex-column align-items-center py-4" style="background: var(--gray-dark)">
-            <img src="{{ $usuario->profile_photo_url ?? asset('blank-profile-picure-1024x1024.webp') }}" alt="Foto de perfil" 
-            width="200" height="200" class="rounded-circle py-2 bg-white border border-gray-300 shadow-sm">
+            <img src="{{ $usuario->profile_photo_url ?? asset('blank-profile-picure-1024x1024.webp') }}"
+                alt="Foto de perfil" width="200" height="200"
+                class="rounded-circle py-2 bg-white border border-gray-300 shadow-sm">
         </div>
         <div class="row w-100 px-4" style="margin-top: 2rem;">
-            <div class="col-md-6 col-sm-12 text-6xl">
+            <div class="col-md-6 col-sm-12">
                 <h4 class="font-weight-bold">Nombre</h4>
                 <p class="card-text">{{ $usuario->name ?? '-' }}</p>
             </div>

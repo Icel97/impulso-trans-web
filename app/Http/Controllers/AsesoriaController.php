@@ -98,14 +98,21 @@ class AsesoriaController extends Controller
             $asesoria = Asesoria::find($id);
             if ($asesoria) {
                 $user_id = $asesoria->id_user;
+                // If the asesoria is being cancelled, we need to update the cancelaciones table
                 if ($asesoria->estatus != AsesoriasStatusEnum::CANCELADA->value && $estatus == AsesoriasStatusEnum::CANCELADA->value) {
                     $canceladaCount = Cancelaciones::firstOrCreate(['id_user' => $user_id]);
                     $canceladaCount->total += 1;
                     $canceladaCount->save();
-                } else if ($asesoria->estatus == AsesoriasStatusEnum::CANCELADA->value && $estatus != AsesoriasStatusEnum::CANCELADA->value) {
+                }
+                // If the asesoria is being updated to a different status, we need to update the cancelaciones table
+                else if ($asesoria->estatus == AsesoriasStatusEnum::CANCELADA->value && $estatus != AsesoriasStatusEnum::CANCELADA->value) {
                     $canceladaCount = Cancelaciones::firstOrCreate(['id_user' => $user_id]);
                     $canceladaCount->total = 0;
                     $canceladaCount->save();
+                }
+
+                if ($estatus == AsesoriasStatusEnum::CANCELADA->value || $estatus == AsesoriasStatusEnum::FINALIZADA->value) {
+                    $asesoria->fecha_cita = new \DateTime();
                 }
                 $asesoria->estatus = $estatus;
                 $asesoria->notas = $notas;
