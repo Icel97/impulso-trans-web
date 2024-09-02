@@ -13,13 +13,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('historial__suscripcions', function (Blueprint $table) {
-            $table->id(); 
+            $table->id();
             $table->foreignId('suscripcion_id')->constrained('suscripciones'); // Relación con la suscripción original
             $table->enum('estatus', SuscripcionStatusEnum::toArray())->default(SuscripcionStatusEnum::Inactiva->value);
             //dates can be null
             $table->date('fecha_inicio')->nullable();
             $table->date('fecha_fin')->nullable();
-            $table->foreignId('usuario_id')->constrained('users'); 
+            $table->foreignId('usuario_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
