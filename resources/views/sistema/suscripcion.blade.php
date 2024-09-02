@@ -42,16 +42,16 @@
                             href="{{ route('suscripciones.index', ['filter' => 'all']) }}">Todos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ $filter === 'inactive' ? 'inactive' : '' }}"
-                            href="{{ route('suscripciones.index', ['filter' => 'review']) }}">Inactivos</a>
+                        <a class="nav-link {{ $filter === 'inactive' ? 'active' : '' }}"
+                            href="{{ route('suscripciones.index', ['filter' => 'inactive']) }}">Inactivos</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ $filter === 'active' ? 'active' : '' }}"
                             href="{{ route('suscripciones.index', ['filter' => 'active']) }}">Activos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ $filter === 'expired' ? 'expired' : '' }}"
-                            href="{{ route('suscripciones.index', ['filter' => 'approved']) }}">Vencidos</a>
+                        <a class="nav-link {{ $filter === 'expired' ? 'active' : '' }}"
+                            href="{{ route('suscripciones.index', ['filter' => 'expired']) }}">Vencidos</a>
                     </li>
                 </ul>
 
@@ -102,7 +102,7 @@
                                     $rowClass = '';
                                 }
                             @endphp
-                            <tr class="{{ $rowClass }}">
+                            <tr>
                                 <td>{{ $s->id }}</td>
                                 <td>{{ $s->user->email }}</td>
                                 <td>{{ $s->fecha_inicio }}</td>
@@ -138,6 +138,9 @@
                             </tr>
                         @endforeach
                     </x-adminlte-datatable>
+                @else
+                    <p class="text-muted">Aún no hay registros</p>
+
                 @endif
             </div>
         </div>
@@ -161,10 +164,6 @@
                 $('#content').show();
             });
 
-            @if ($errors->any())
-                $('#newProductModal').modal('show');
-            @endif
-
             // Hide alerts after 5 seconds
             setTimeout(function() {
                 $('#success-alert').fadeOut('slow');
@@ -184,13 +183,14 @@
                 $('#' + formId).val(action);
 
                 Swal.fire({
-                    title: '¿Estás seguro?',
+                    title: 'Cancelar suscripción',
                     text: "El pago se marcará como completado.",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: '¡Sí, rechazar!'
+                    confirmButtonText: '¡Sí, quitar!',
+                    cancelButtonText: 'Cancelar'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         this.submit();
@@ -229,4 +229,12 @@
             });
         });
     </script>
+    @if ($errors->any())
+        <script>
+            $(document).ready(function() {
+                $('#newProductModal').modal('show');
+            });
+        </script>
+    @endif
+
 @stop

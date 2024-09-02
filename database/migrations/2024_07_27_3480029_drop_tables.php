@@ -11,10 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('citas', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+        Schema::dropIfExists('pagos_historial');
+        Schema::dropIfExists('historial_pagos');
+        Schema::dropIfExists('historial__suscripcions');
     }
 
     /**
@@ -22,6 +21,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('citas');
+        //
     }
 };

@@ -5,6 +5,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PagoController;
 use App\Http\Controllers\MetricasController;
+use App\Http\Controllers\Api\CalendlyWebhookController;
+use App\Http\Controllers\Api\UserController;
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -36,3 +40,13 @@ Route::get("/metricas/usuario_identidades", [MetricasController::class, 'usuario
 Route::get("/metricas/usuario_pronombres", [MetricasController::class, 'usuario_pronombres'])->name('metricas.usuario_pronombres');
 Route::get("/metricas/usuario_afro_indigena", [MetricasController::class, 'usuario_afro_indigena'])->name('metricas.usuario_afro_indigena');
 Route::get("/metricas/usuarios_afiliados", [MetricasController::class, 'usuarios_afiliados'])->name('metricas.usuarios_afiliados');
+// Calendly Webhook
+Route::post('/webhook/calendly/subscribe', [CalendlyWebhookController::class, 'subscribeToWebhook']);
+Route::get('/webhook/calendly/data', [CalendlyWebhookController::class, 'getDataCalendly']);
+Route::get('/webhook/calendly/list', [CalendlyWebhookController::class, 'getListWebhook']);
+Route::post('/webhook/calendly', [CalendlyWebhookController::class, 'handleWebhook'])->name('calendly.webhook.handle');
+Route::get('/webhook/calendly/test', [CalendlyWebhookController::class, 'testInsert']);
+
+// login and register
+Route::post('/register', [UserController::class, 'register']);
+Route::post('/login', [UserController::class, 'login']);

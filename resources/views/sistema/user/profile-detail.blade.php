@@ -7,7 +7,7 @@
         </div>
         <div class="row w-100 px-4" style="margin-top: 2rem;">
             <div class="col-md-6 col-sm-12">
-                <h4 class="font-weight-bold">Nombre</h4>
+                <p class="font-weight-bold">Nombre</p>
                 <p class="card-text">{{ $usuario->name ?? '-' }}</p>
             </div>
             <div class="col-md-6 col-sm-12">

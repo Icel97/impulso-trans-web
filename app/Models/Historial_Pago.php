@@ -9,7 +9,7 @@ class Historial_Pago extends Model
 {
     use HasFactory;
 
-    protected $table = 'pagos_historial';
+    protected $table = 'historial_pagos';
     protected $primaryKey = 'id';
 
     protected $fillable = [

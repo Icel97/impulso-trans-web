@@ -68,7 +68,7 @@
                         {{ session('error') }}
                     </x-adminlte-alert>
                 @elseif (session('info'))
-                    <x-adminlte-alert theme="info" title="Alerta" id="info-alert">
+                    <x-adminlte-alert theme="info" title="Info" id="info-alert">
                         {{ session('info') }}
                     </x-adminlte-alert>
                 @endif
@@ -94,8 +94,7 @@
                             'lengthMenu' => [25, 50, 100, 500],
                         ];
                     @endphp
-                    <x-adminlte-datatable id="table-pagos" :heads="$heads" :config="$config" hoverable with-buttons
-                        compressed>
+                    <x-adminlte-datatable id="table-pagos" :heads="$heads" :config="$config" hoverable compressed>
                         @foreach ($pagos as $pago)
                             @php
                                 $status = $pago->validado->value;
@@ -113,10 +112,28 @@
                                 }
                             @endphp
                             <tr class="{{ $rowClass }}">
-                                <td>{{ $pago->id }}</td>
-                                <td>{{ $pago->fecha_envio }}</td>
-                                <td>{{ $pago->user->email }}</td>
-                                <td>{{ $pago->validado }}</td>
+                                <td>
+                                    <p>{{ $pago->id }}</p>
+                                </td>
+                                <td>
+                                    <p>
+                                        {{ $pago->fecha_envio }}
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                        {{ $pago->user->email }}
+                                    </p>
+                                </td>
+                                <td>
+
+                                    @if ($status == 'Aprobado')
+                                        <span class="badge badge-success">{{ $status }}</span>
+                                    @elseif ($status == 'Rechazado')
+                                        <span class="badge badge-danger">{{ $status }}</span>
+                                    @else
+                                    @endif
+                                </td>
                                 <td>
                                     @if ($status !== 'Pendiente')
                                         <form action="{{ route('pagos.validarPago') }}" method="post"
@@ -149,6 +166,9 @@
                             </tr>
                         @endforeach
                     </x-adminlte-datatable>
+                @else
+                    <p class="text-muted">Aún no hay registros</p>
+
                 @endif
             </div>
         </div>
@@ -172,14 +192,11 @@
                 $('#content').show();
             });
 
-            @if ($errors->any())
-                $('#newProductModal').modal('show');
-            @endif
-
             // Hide alerts after 5 seconds
             setTimeout(function() {
                 $('#success-alert').fadeOut('slow');
                 $('#error-alert').fadeOut('slow');
+                $('#info-alert').fadeOut('slow');
             }, 5000);
 
             $('.formValidar').submit(function(e) {
@@ -201,7 +218,10 @@
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: action === 'accepted' ? '¡Sí, validar!' : '¡Sí, rechazar!'
+                    confirmButtonText: action === 'accepted' ? '¡Sí, validar!' : '¡Sí, rechazar!',
+                    cancelButtonText: 'Cancelar'
+
+
                 }).then((result) => {
                     if (result.isConfirmed) {
                         this.submit();
@@ -240,4 +260,11 @@
             });
         });
     </script>
+    @if ($errors->any())
+        <script>
+            $(document).ready(function() {
+                $('#newProductModal').modal('show');
+            });
+        </script>
+    @endif
 @stop

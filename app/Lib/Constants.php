@@ -11,7 +11,7 @@ class Constants
         "PAGO_YA_ENVIADO" => "Ya has enviado un pago",
         "PAGO_NO_ENCONTRADO" => "Pago no encontrado",
         "PAGO_VALIDADO" => "Pago actualizado",
-        "PAGO_RECHAZADO" => "Pago actualizado",
+        "PAGO_RECHAZADO" => "Tu pago ha sido rechazado",
     ];
 
     const SUSCRIPCIONES_MENSAJES = [
@@ -35,5 +35,11 @@ class Constants
         "ACTUALIZADO" => "Actualizado correctamente",
         "ARCHIVO_NO_ENCONTRADO" => "Archivo no encontrado",
         "ELIMINADO" => "Eliminado correctamente",
+    ];
+
+    const PERMISOS = [
+        "PERMISO_ELIMINADO" => "Permiso eliminado",
+        "PERMISO_ACTUALIZADO" => "Permiso actualizado",
+        "PERMISO_CREADO" => "Permiso creado",
     ];
 }

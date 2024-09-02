@@ -40,10 +40,6 @@ class PagoController extends Controller
                     break;
             }
 
-            if (sizeof($pagos) === 0) {
-                $request->session()->flash('error', Constants::PAGO_MENSAJES['NO_HAY_PAGOS']);
-                return view('sistema.pago', compact('pagos', 'filter'));
-            }
             $request->session()->forget('error');
             return view('sistema.pago', compact('pagos', 'filter'));
         } catch (\Exception $e) {
@@ -78,7 +74,7 @@ class PagoController extends Controller
 
             if ($pago) {
                 $estatus = $pago->validado;
-                if ($estatus === PagoStatusEnum::Pendiente || $estatus === PagoStatusEnum::Expirado) {
+                if ($estatus === PagoStatusEnum::Pendiente || $estatus === PagoStatusEnum::Expirado || $estatus === PagoStatusEnum::Rechazado) {
                     $pago->comprobante_url = $fileName;
                     $pago->validado = PagoStatusEnum::Revision;
                     $pago->fecha_envio = now();

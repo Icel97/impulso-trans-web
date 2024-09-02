@@ -27,8 +27,25 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'apellidos',
+        'identidad_genero',
+        'pronombres',
+        'fecha_nacimiento',
         'email',
         'password',
+        'telefono',
+        'id_estado_residencia',
+        'id_municipio_residencia',
+        'discapacidad',
+        'neurodivergencia',
+        'indigena',
+        'afrodescendiente',
+        'two_factor_secret',
+        'two_factor_recovery_codes',
+        'two_factor_confirmed_at',
+        'remember_token',
+        'current_team_id',
+        'profile_photo_path',
     ];
 
     /**
@@ -50,6 +67,10 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'fecha_nacimiento' => 'date',
+        'neurodivergencia' => 'boolean',
+        'indigena' => 'boolean',
+        'afrodescendiente' => 'boolean',
     ];
 
     /**

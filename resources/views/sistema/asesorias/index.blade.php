@@ -98,8 +98,7 @@
                             'lengthMenu' => [25, 50, 100, 500],
                         ];
                     @endphp
-                    <x-adminlte-datatable id="table1" :heads="$heads" :config="$config" hoverable with-buttons
-                        compressed>
+                    <x-adminlte-datatable id="table1" :heads="$heads" :config="$config" hoverable compressed>
                         @foreach ($asesorias as $asesoria)
                             @php
                                 $status = $asesoria->estatus;
@@ -133,6 +132,9 @@
                             </tr>
                         @endforeach
                     </x-adminlte-datatable>
+                @else
+                    <p class="text-muted">Aún no hay registros</p>
+
                 @endif
             </div>
         </div>
@@ -215,7 +217,7 @@
                         </div>
                         <div class="row mx-n2">
                             <div class="col-md-6 mb-4 px-2">
-                                <p class="font-weight-bold text-primary">Cancelaciones</p>
+                                <p class="font-weight-bold text-primary">Cancelaciones (consecutivas)</p>
                                 <div class="bg-light rounded w-100 mr-2">
                                     <p id="canceladas" class="card-text">-</p>
                                 </div>
@@ -267,6 +269,7 @@
             setTimeout(function() {
                 $('#success-alert').fadeOut('slow');
                 $('#error-alert').fadeOut('slow');
+                $('#info-alert').fadeOut('slow');
             }, 5000);
 
             $('.formValidar').submit(function(e) {
@@ -330,7 +333,9 @@
                             .val(data.notas ?? '-');
                         $('#submit-button').prop('disabled',
                             false);
-                        $('#canceladas').text(data.user.cancelacion.total ?? '-');
+                        $('#canceladas').text(data.user.cancelacion && data.user.cancelacion
+                            .total !== null && data.user.cancelacion.total !== undefined ?
+                            data.user.cancelacion.total : '-');
                     },
                     error: function(data) {
                         console.error(data);
@@ -369,7 +374,7 @@
                         $('#success-alert2').show();
                         $('#loading').css('display', 'flex');
                         $('#content').hide();
-                        // location.reload();
+                        location.reload();
 
                     },
                     error: function(data) {
@@ -380,7 +385,7 @@
                         $('#error-alert2').show();
                         $('#loading').css('display', 'flex');
                         $('#content').hide();
-                        // location.reload();
+                        location.reload();
                     },
                 });
             });
