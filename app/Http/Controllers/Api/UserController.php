@@ -71,6 +71,6 @@ class UserController extends Controller
                 'email' => $user->email,
                 'birthday' => $user->fecha_nacimiento,
             ]
-        ], 200);    
+        ], 200);
     }
 }

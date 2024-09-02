@@ -21,7 +21,7 @@ class CalendlyWebhookController extends Controller
     {
         $endPoint = $this->urlCalendly . '/users/me';
         $client = new Client();
-        
+
         $response = $client->get($endPoint, [
             'headers' => [
                 'Authorization' => 'Bearer ' . $this->token,
@@ -30,7 +30,6 @@ class CalendlyWebhookController extends Controller
         ]);
 
         return json_decode($response->getBody()->getContents());
-
     }
 
     public function subscribeToWebhook(Request $request)
@@ -69,7 +68,7 @@ class CalendlyWebhookController extends Controller
     }
 
     public function getListWebhook()
-    {   
+    {
         $dataCalendly = $this->getDataCalendly();
         $organization = $dataCalendly->resource->current_organization;
         $user = $dataCalendly->resource->uri;
@@ -114,7 +113,7 @@ class CalendlyWebhookController extends Controller
         $email = $payload['invitee']['email'];
         $startTime = $payload['event']['start_time'];
         $endTime = $payload['event']['end_time'];
-    
+
         // try {
         //     // Guarda la información en la base de datos
         //     $appointment = Appointment::create([
@@ -139,6 +138,4 @@ class CalendlyWebhookController extends Controller
         //     ], 500);
         // }
     }
-
-    
 }

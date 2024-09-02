@@ -112,10 +112,28 @@
                                 }
                             @endphp
                             <tr class="{{ $rowClass }}">
-                                <td>{{ $pago->id }}</td>
-                                <td>{{ $pago->fecha_envio }}</td>
-                                <td>{{ $pago->user->email }}</td>
-                                <td>{{ $pago->validado }}</td>
+                                <td>
+                                    <p>{{ $pago->id }}</p>
+                                </td>
+                                <td>
+                                    <p>
+                                        {{ $pago->fecha_envio }}
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                        {{ $pago->user->email }}
+                                    </p>
+                                </td>
+                                <td>
+
+                                    @if ($status == 'Aprobado')
+                                        <span class="badge badge-success">{{ $status }}</span>
+                                    @elseif ($status == 'Rechazado')
+                                        <span class="badge badge-danger">{{ $status }}</span>
+                                    @else
+                                    @endif
+                                </td>
                                 <td>
                                     @if ($status !== 'Pendiente')
                                         <form action="{{ route('pagos.validarPago') }}" method="post"
@@ -200,7 +218,10 @@
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: action === 'accepted' ? '¡Sí, validar!' : '¡Sí, rechazar!'
+                    confirmButtonText: action === 'accepted' ? '¡Sí, validar!' : '¡Sí, rechazar!',
+                    cancelButtonText: 'Cancelar'
+
+
                 }).then((result) => {
                     if (result.isConfirmed) {
                         this.submit();

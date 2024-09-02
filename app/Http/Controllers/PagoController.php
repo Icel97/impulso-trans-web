@@ -74,7 +74,7 @@ class PagoController extends Controller
 
             if ($pago) {
                 $estatus = $pago->validado;
-                if ($estatus === PagoStatusEnum::Pendiente || $estatus === PagoStatusEnum::Expirado) {
+                if ($estatus === PagoStatusEnum::Pendiente || $estatus === PagoStatusEnum::Expirado || $estatus === PagoStatusEnum::Rechazado) {
                     $pago->comprobante_url = $fileName;
                     $pago->validado = PagoStatusEnum::Revision;
                     $pago->fecha_envio = now();

@@ -102,7 +102,7 @@
                                     $rowClass = '';
                                 }
                             @endphp
-                            <tr class="{{ $rowClass }}">
+                            <tr>
                                 <td>{{ $s->id }}</td>
                                 <td>{{ $s->user->email }}</td>
                                 <td>{{ $s->fecha_inicio }}</td>
@@ -183,13 +183,14 @@
                 $('#' + formId).val(action);
 
                 Swal.fire({
-                    title: '¿Estás seguro?',
+                    title: 'Cancelar suscripción',
                     text: "El pago se marcará como completado.",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: '¡Sí, rechazar!'
+                    confirmButtonText: '¡Sí, quitar!',
+                    cancelButtonText: 'Cancelar'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         this.submit();
