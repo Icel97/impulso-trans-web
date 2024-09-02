@@ -14,17 +14,14 @@ return new class extends Migration
     {
         Schema::create('historial_pagos', function (Blueprint $table) {
             $table->id();
-<<<<<<<< HEAD:database/migrations/2024_07_27_085452_create_historial__pagos_table.php
             $table->foreignId('pago_id')->constrained('pagos'); // Relación con el pago original
             $table->string('comprobante_url');
             $table->enum('validado', PagoStatusEnum::toArray())->default(PagoStatusEnum::Pendiente->value);
             $table->dateTime('fecha_envio')->nullable();
-========
             $table->string('comprobante_url');
             $table->enum('validado', PagoStatusEnum::toArray())->default(PagoStatusEnum::Pendiente->value);
             $table->dateTime('fecha_envio')->nullable();
             $table->foreignId('pago_id')->constrained('pagos')->onDelete('cascade');
->>>>>>>> main:database/migrations/2024_07_27_085458_create_historial__pagos_table.php
             $table->foreignId('usuario_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });

@@ -94,8 +94,7 @@
                             'lengthMenu' => [25, 50, 100, 500],
                         ];
                     @endphp
-                    <x-adminlte-datatable id="table-pagos" :heads="$heads" :config="$config" hoverable with-buttons
-                        compressed>
+                    <x-adminlte-datatable id="table-pagos" :heads="$heads" :config="$config" hoverable compressed>
                         @foreach ($pagos as $pago)
                             @php
                                 $status = $pago->validado->value;
@@ -175,10 +174,6 @@
                 $('#content').show();
             });
 
-            @if ($errors->any())
-                $('#newProductModal').modal('show');
-            @endif
-
             // Hide alerts after 5 seconds
             setTimeout(function() {
                 $('#success-alert').fadeOut('slow');
@@ -244,4 +239,11 @@
             });
         });
     </script>
+    @if ($errors->any())
+        <script>
+            $(document).ready(function() {
+                $('#newProductModal').modal('show');
+            });
+        </script>
+    @endif
 @stop

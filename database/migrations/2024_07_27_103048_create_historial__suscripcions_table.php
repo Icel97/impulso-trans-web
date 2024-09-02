@@ -14,17 +14,11 @@ return new class extends Migration
     {
         Schema::create('historial__suscripcions', function (Blueprint $table) {
             $table->id();
-<<<<<<<< HEAD:database/migrations/2024_07_27_103043_create_historial__suscripcions_table.php
             $table->foreignId('suscripcion_id')->constrained('suscripciones'); // Relación con la suscripción original
-========
->>>>>>>> main:database/migrations/2024_07_27_103048_create_historial__suscripcions_table.php
             $table->enum('estatus', SuscripcionStatusEnum::toArray())->default(SuscripcionStatusEnum::Inactiva->value);
             $table->date('fecha_inicio')->nullable();
             $table->date('fecha_fin')->nullable();
-<<<<<<<< HEAD:database/migrations/2024_07_27_103043_create_historial__suscripcions_table.php
-========
             $table->foreignId('suscripcion_id')->constrained('suscripciones')->onDelete('cascade');
->>>>>>>> main:database/migrations/2024_07_27_103048_create_historial__suscripcions_table.php
             $table->foreignId('usuario_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });

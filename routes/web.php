@@ -9,6 +9,11 @@ use App\Http\Controllers\PermisoController;
 use App\Http\Controllers\PagoController;
 use App\Http\Controllers\SuscripcionController;
 use App\Http\Controllers\AsignarController;
+use App\Http\Controllers\TextoController;
+use App\Http\Controllers\MapaController;
+use App\Models\WebsiteText;
+use App\Models\PointOfInterest;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -22,8 +27,11 @@ use App\Http\Controllers\AsignarController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    //pasar los textos de los programas
+    $programas = WebsiteText::where('section', 'programas')->get();
+    $points = PointOfInterest::all();
+    return view('welcome', compact('programas', 'points'));
+})->name('landing_page');
 
 Route::middleware([
     'auth:sanctum',
@@ -58,4 +66,8 @@ Route::middleware([
 
     Route::get('/roles/{role}/permisos', [RolController::class, 'permisos'])->name('roles.permisos');
     Route::put('/roles/{role}/asignarPermisos', [RolController::class, 'asignarPermisos'])->name('roles.asignarPermisos');
+
+    Route::resource('/texto', TextoController::class)->names('texto');
+    Route::put('/textos', [TextoController::class, 'update'])->name('texts.update');
+    Route::resource('/puntos', MapaController::class)->names('puntos');
 });

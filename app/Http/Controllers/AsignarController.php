@@ -56,6 +56,8 @@ class AsignarController extends Controller
             ]);
 
             if ($validator->fails()) {
+                log::error('Error creating user: ' . $validator->errors());
+                DB::rollBack();
                 return redirect()->route('usuarios.index')->withErrors($validator)->withInput();
             }
 

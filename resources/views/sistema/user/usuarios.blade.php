@@ -7,8 +7,8 @@
     @can('Crear Usuario')
         <div class="d-flex justify-content-end">
 
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newUsuarioModal"><i class="fa fa-plus"
-                    aria-hidden="true"></i> Usuario</button>
+            <button id="btn-newUsuario" type="button" class="btn btn-primary" data-toggle="modal" data-target="#newUsuarioModal"><i
+                    class="fa fa-plus" aria-hidden="true"></i> Usuario</button>
         </div>
     @endcan
 @stop
@@ -69,7 +69,7 @@
                                 </button>';
                         $config = [
                             'language' => [
-                                'url' => '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json',
+                                'url' => asset('/js/lang/es-ES.json'), // Usar archivo local
                             ],
                             'columns' => [null, null, null, ['orderable' => false], ['orderable' => false]],
                             'lengthMenu' => [25, 50, 100, 500],
@@ -79,8 +79,8 @@
 
 
                     <div style="max-height: 75vh; overflow-y: auto;">
-                        <x-adminlte-datatable id="table-usuarios" :heads="$heads" :config="$config" hoverable with-buttons
-                            compressed style="500px">
+                        <x-adminlte-datatable id="table-usuarios" :heads="$heads" :config="$config" hoverable compressed
+                            style="500px">
                             @foreach ($usuarios as $usuario)
                                 <tr>
                                     <td>{{ $usuario->id }}</td>
@@ -131,7 +131,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div id="form-loading" style="display: none;" class="justify-content-center align-self-center">
+                        <div id="form-loading" class="justify-content-center align-self-center" style="display: none">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid"
                                 width="200" height="200"
                                 style="shape-rendering: auto; display: block; background: rgb(255, 255, 255);"
@@ -155,7 +155,6 @@
                                             keyTimes="0;1" values="1;0" dur="1.5625s" repeatCount="indefinite"
                                             attributeName="opacity"></animate>
                                     </circle>
-                                    <g></g>
                                 </g>
                             </svg>
                         </div>
@@ -221,9 +220,11 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script>
         $(document).ready(function() {
+
             $('#loading').css('display', 'flex');
             $('#content').hide();
             $(window).on('load', function() {
+                console.log('Window loaded');
                 $('#loading').hide();
                 $('#content').show();
             });
@@ -285,7 +286,8 @@
     @if ($errors->any())
         <script>
             $(document).ready(function() {
-                $('#newUsuarioModal').modal('show');
+                console.log("Hola");
+                $('#btn-newUsuario').click();
             });
         </script>
     @endif

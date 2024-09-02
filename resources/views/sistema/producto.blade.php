@@ -65,7 +65,7 @@
 
                     $config = [
                         'language' => [
-                            'url' => '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json',
+                            'url' => '/js/lang/es-ES.json',
                         ],
                     ];
                 @endphp
@@ -194,10 +194,6 @@
                 $('#content').show();
             });
 
-            @if ($errors->any())
-                $('#newProductModal').modal('show');
-            @endif
-
             // Hide alerts after 5 seconds
             setTimeout(function() {
                 $('#success-alert').fadeOut('slow');
@@ -252,4 +248,11 @@
             });
         });
     </script>
+    @if ($errors->any())
+        <script>
+            $(document).ready(function() {
+                $('#newProductModal').modal('show');
+            });
+        </script>
+    @endif
 @stop
