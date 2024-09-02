@@ -16,9 +16,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('suscripcion_id')->constrained('suscripciones'); // Relación con la suscripción original
             $table->enum('estatus', SuscripcionStatusEnum::toArray())->default(SuscripcionStatusEnum::Inactiva->value);
-            //dates can be null
             $table->date('fecha_inicio')->nullable();
             $table->date('fecha_fin')->nullable();
+            $table->foreignId('suscripcion_id')->constrained('suscripciones')->onDelete('cascade');
             $table->foreignId('usuario_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });

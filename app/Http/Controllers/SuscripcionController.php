@@ -47,7 +47,6 @@ class SuscripcionController extends Controller
                     break;
             }
             if (sizeof($suscripciones) === 0) {
-                $request->session()->flash('info', Constants::SUSCRIPCIONES_MENSAJES['NO_HAY_SUSCRIPCIONES']);
                 return view('sistema.suscripcion', compact('suscripciones', 'filter'));
             }
 
@@ -67,6 +66,7 @@ class SuscripcionController extends Controller
 
         DB::beginTransaction();
         try {
+            $action = $request->query('action');
             $suscripcion = Suscripcion::find($request->id);
 
             if ($suscripcion == null) {

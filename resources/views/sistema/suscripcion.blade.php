@@ -1,11 +1,10 @@
 @extends('adminlte::page')
 
-@section('title', 'Ejemplo')
+@section('title', 'Impulso trans - Suscripciones')
 
 @section('content_header')
-    <div class="d-flex justify-content-between">
-        <h1>Suscripciones</h1>
-    </div>
+    <h1> </h1>
+
 @stop
 
 @section('content')
@@ -33,201 +32,116 @@
 
     <div id="content">
         <div class="card">
-            <div class="card-title">
+            <div class="card-header">
+                <h1>Suscripciones</h1>
+            </div>
+            <div class="card-body">
                 <ul class="nav nav-tabs">
                     <li class="nav-item">
                         <a class="nav-link {{ $filter === 'all' ? 'active' : '' }}"
                             href="{{ route('suscripciones.index', ['filter' => 'all']) }}">Todos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ $filter === 'active' ? 'active' : '' }}"
-                            href="{{ route('suscripciones.index', ['filter' => 'active']) }}">Activas</a>
+                        <a class="nav-link {{ $filter === 'inactive' ? 'active' : '' }}"
+                            href="{{ route('suscripciones.index', ['filter' => 'inactive']) }}">Inactivos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ $filter === 'inactive' ? 'active' : '' }}"
-                            href="{{ route('suscripciones.index', ['filter' => 'inactive']) }}">Inactivas</a>
+                        <a class="nav-link {{ $filter === 'active' ? 'active' : '' }}"
+                            href="{{ route('suscripciones.index', ['filter' => 'active']) }}">Activos</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ $filter === 'expired' ? 'active' : '' }}"
-                            href="{{ route('suscripciones.index', ['filter' => 'expired']) }}">Vencidas</a>
+                            href="{{ route('suscripciones.index', ['filter' => 'expired']) }}">Vencidos</a>
                     </li>
                 </ul>
-            </div>
-            <div class="card-body">
-                @if (session('success') == 'Pago validado')
-                    <x-adminlte-alert theme="success" title="Producto guardado" id="success-alert">
-                        Estado del pago actualizado correctamente.
-                    </x-adminlte-alert>
-                @elseif (session('success') == 'Pago rechazado')
-                    <x-adminlte-alert theme="success" title="Estado de pago actualizado" id="success-alert">
-                        Estado del pago actualizado correctamente.
-                    </x-adminlte-alert>
-                @elseif(session('error') === 'Suscripción no encontrada')
-                    <x-adminlte-alert theme="danger" title="Error" id="error-alert">
-                        Suscripción no encontrada.
+
+                @if (session('success'))
+                    <x-adminlte-alert theme="success" title="Info" id="success-alert">
+                        {{ session('success') }}
                     </x-adminlte-alert>
                 @elseif (session('error'))
-                    <x-adminlte-alert theme="danger" title="Error" id="error-alert">
-                        Hubo un error al actualizar el estatus del pago.
+                    <x-adminlte-alert theme="danger" title="Hubo un error" id="error-alert">
+                        {{ session('error') }}
+                    </x-adminlte-alert>
+                @elseif (session('info'))
+                    <x-adminlte-alert theme="info" title="Alerta" id="info-alert">
+                        {{ session('info') }}
                     </x-adminlte-alert>
                 @endif
 
-                @php
-                    $heads = [
-                        'ID',
-                        'Usuario',
-                        'Fecha inicio MM/DD/YY',
-                        'Fecha Fin MM/DD/YY',
-                        'Estatus',
-                        ['label' => 'Acciones', 'no-export' => true, 'width' => 8],
-                    ];
-
-                    $btnEdit = '';
-                    $btnValidate = '<button type="submit" class="btn btn-md btn-default text-primary mx-1 btn-validate" title="Validar">
-                                        <i class="fas fa-lg fa-check"></i>
-                                    </button>';
-                    $btnReject = '<button type="submit" class="btn btn-md btn-default text-danger mx-1 btn-reject" title="Rechazar">
-                                        <i class="fas fa-lg fa-times"></i>
-                                    </button>';
-
-                    $config = [
-                        'language' => [
-                            'url' => '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json',
-                        ],
-                        // 'order' => [[0, 'desc']],
-                        'responsive' => true,
-                        'columns' => [null, null, null, null, ['orderable' => false], ['orderable' => false]],
-                    ];
-                @endphp
-
-                <x-adminlte-datatable id="table1" :heads="$heads" :config="$config">
-                    @foreach ($suscripciones as $s)
-                        @php
-                            $status = $s->estatus->value;
-                            $turnOffActionValidar = false;
-                            $turnOffActionRechazar = false;
-                            $rowClass = '';
-                            if ($status == 'Aprobado') {
-                                $turnOffActionValidar = true;
-                                $rowClass = 'table-dark text-success';
-                            } elseif ($status == 'Rechazado') {
-                                $turnOffActionRechazar = true;
-                                $rowClass = 'table-dark text-danger';
-                            } else {
+                @if (sizeof($suscripciones) > 0)
+                    @php
+                        $heads = [
+                            'ID',
+                            'Usuario',
+                            'Inicio MM/DD/YY',
+                            'Fin MM/DD/YY',
+                            'Estado',
+                            ['label' => 'Acciones', 'no-export' => true, 'width' => 8],
+                        ];
+                        $config = [
+                            'language' => [
+                                'url' => '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json',
+                            ],
+                            'order' => [[1, 'desc']],
+                            'columns' => [null, null, null, null, ['orderable' => false], ['orderable' => false]],
+                            'lengthMenu' => [25, 50, 100, 500],
+                        ];
+                    @endphp
+                    <x-adminlte-datatable id="table-suscripciones" :heads="$heads" :config="$config" hoverable
+                        with-buttons compressed>
+                        @foreach ($suscripciones as $s)
+                            @php
+                                $status = $s->estatus->value;
                                 $rowClass = '';
-                            }
-                            $rowClass = '';
-                        @endphp
-                        <tr class="{{ $rowClass }}">
-                            <td>{{ $s->id }}</td>
-                            <td>{{ $s->user->email }}</td>
-                            <td>{{ $s->fecha_inicio }}</td>
-                            <td>{{ $s->fecha_fin }}</td>
-                            <td>{{ $s->estatus->value }}</td>
-                            <td>
-
-                                @if ($status == 'Activa')
-                                    <form action="{{ route('suscripciones.actualizarSuscripcion') }}" method="post"
-                                        class="formActualizar d-flex">
-
-                                        @csrf
-                                        <input type="hidden" name="action" id="action-{{ $s->id }}">
-                                        <button type="submit" class="btn btn-md btn-default text-danger mx-1 btn-reject"
-                                            title="Rechazar" {{ $turnOffActionRechazar ? 'disabled' : '' }}>
-                                            <i class="fas fa-lg fa-times"></i>
-                                        </button>
-                                    </form>
-                                @else
-                                    -
-                                @endif
-
-                            </td>
-                        </tr>
-                    @endforeach
-                </x-adminlte-datatable>
-
-            </div>
-        </div>
-
-        <div class="modal fade" id="newProductModal" tabindex="-1" role="dialog" aria-labelledby="newProductModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="newProductModalLabel">Nuevo Pago</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div id="form-loading" style="display: none;" class="justify-content-center align-self-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid"
-                                width="200" height="200"
-                                style="shape-rendering: auto; display: block; background: rgb(255, 255, 255);"
-                                xmlns:xlink="http://www.w3.org/1999/xlink">
-                                <g>
-                                    <circle stroke-width="8" stroke="#f5a9b8" fill="none" r="0" cy="50"
-                                        cx="50">
-                                        <animate begin="0s" calcMode="spline" keySplines="0 0.2 0.8 1"
-                                            keyTimes="0;1" values="0;57" dur="1.5625s" repeatCount="indefinite"
-                                            attributeName="r"></animate>
-                                        <animate begin="0s" calcMode="spline" keySplines="0.2 0 0.8 1"
-                                            keyTimes="0;1" values="1;0" dur="1.5625s" repeatCount="indefinite"
-                                            attributeName="opacity"></animate>
-                                    </circle>
-                                    <circle stroke-width="8" stroke="#5bcefa" fill="none" r="0" cy="50"
-                                        cx="50">
-                                        <animate begin="-0.78125s" calcMode="spline" keySplines="0 0.2 0.8 1"
-                                            keyTimes="0;1" values="0;57" dur="1.5625s" repeatCount="indefinite"
-                                            attributeName="r"></animate>
-                                        <animate begin="-0.78125s" calcMode="spline" keySplines="0.2 0 0.8 1"
-                                            keyTimes="0;1" values="1;0" dur="1.5625s" repeatCount="indefinite"
-                                            attributeName="opacity"></animate>
-                                    </circle>
-                                    <g></g>
-                                </g>
-                            </svg>
-                        </div>
-                        <div id="form-content">
-                            @if ($errors->any())
-                                <div class="alert alert-danger">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
-                            <form id="productForm" action="{{ route('productos.store') }}" method="post">
-                                @csrf
-                                <x-adminlte-input type="text" name="nombre" label="Nombre"
-                                    placeholder="nuevo producto" label-class="text-lightblue"
-                                    value="{{ old('nombre') }}">
-                                    <x-slot name="prependSlot">
-                                        <div class="input-group-text">
-                                            <i class="fas fa-cube text-lightblue"></i>
+                                if ($status == 'Activa') {
+                                    $rowClass = 'text-success';
+                                } elseif ($status == 'Inactiva') {
+                                    $rowClass = 'text-danger';
+                                } else {
+                                    $rowClass = '';
+                                }
+                            @endphp
+                            <tr class="{{ $rowClass }}">
+                                <td>{{ $s->id }}</td>
+                                <td>{{ $s->user->email }}</td>
+                                <td>{{ $s->fecha_inicio }}</td>
+                                <td>{{ $s->fecha_fin }}</td>
+                                <td>
+                                    @if ($status == 'Activa')
+                                        <span class="badge badge-success">{{ $status }}</span>
+                                    @elseif ($status == 'Inactiva')
+                                        <span class="badge badge-danger">{{ $status }}</span>
+                                    @else
+                                        <span class="badge badge-warning">{{ $status }}</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if ($status === 'Activa')
+                                        <form action="{{ route('suscripciones.actualizarSuscripcion') }}" method="post"
+                                            class="formValidar d-flex">
+                                            @csrf
+                                            <input type="hidden" name="action" id="action-{{ $s->id }}">
+                                            <input type="hidden" name="id" value="{{ $s->id }}">
+                                            <button type="submit"
+                                                class="btn btn-md btn-default text-danger mx-1 btn-reject" title="Rechazar">
+                                                <i class="fas fa-lg fa-times"></i>
+                                            </button>
+                                        </form>
+                                    @else
+                                        <div class="flex justify-content-center">
+                                            <p>-</p>
                                         </div>
-                                    </x-slot>
-                                </x-adminlte-input>
-                                <x-adminlte-textarea name="descripcion" label="Descripcion" rows=5 igroup-size="sm"
-                                    label-class="text-primary" placeholder="ejemplo ..." disable-feedback>
-                                    <x-slot name="prependSlot">
-                                        <div class="input-group-text">
-                                            <i class="fas fa-lg fa-file-alt text-primary"></i>
-                                        </div>
-                                    </x-slot>
-                                    {{ old('descripcion') }}
-                                </x-adminlte-textarea>
-                                <div class="modal-footer">
-                                    <x-adminlte-button label="Cerrar" theme="secondary" icon="fas fa-times"
-                                        data-dismiss="modal" />
-                                    <x-adminlte-button type="submit" label="Guardar" theme="primary"
-                                        icon="fas fa-save" />
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+                                    @endif
+                                </td>
+
+                            </tr>
+                        @endforeach
+                    </x-adminlte-datatable>
+                @else
+                    <p class="text-muted">Aún no hay registros</p>
+
+                @endif
             </div>
         </div>
     </div>
@@ -235,9 +149,12 @@
 
 @section('css')
     {{-- Add here extra stylesheets --}}
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 @stop
 
 @section('js')
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script>
         $(document).ready(function() {
             $('#loading').css('display', 'flex');
@@ -257,7 +174,7 @@
                 $('#error-alert').fadeOut('slow');
             }, 5000);
 
-            $('.formActualizar').submit(function(e) {
+            $('.formValidar').submit(function(e) {
                 e.preventDefault();
                 var action = '';
                 var formId = $(this).find('input[name="action"]').attr('id');
@@ -271,12 +188,12 @@
 
                 Swal.fire({
                     title: '¿Estás seguro?',
-                    text: action === "El pago se marcará como completado",
+                    text: "El pago se marcará como completado.",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: action === 'accepted' ? '¡Sí, validar!' : '¡Sí, rechazar!'
+                    confirmButtonText: '¡Sí, rechazar!'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         this.submit();

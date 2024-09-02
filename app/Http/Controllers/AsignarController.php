@@ -5,17 +5,31 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Log;
+use App\lib\Constants;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class AsignarController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $req)
     {
-        // mostrar usuarios en la vista
-        $usuarios = User::all();
-        return view('sistema.user.usuarios', compact('usuarios'));
+        try {
+            $usuarios = User::orderBy('id', 'ASC')->get();
+
+            if (sizeof($usuarios) === 0) {
+                $req->session()->flash('error', Constants::USUARIOS_MENSAJES['NO_HAY_USUARIOS']);
+                return view('sistema.user.usuarios', compact('usuarios'));
+            }
+
+            return view('sistema.user.usuarios', compact('usuarios'));
+        } catch (\Exception $e) {
+            Log::error('Error fetching users: ' . $e->getMessage());
+            return redirect()->back()->with('error', Constants::USUARIOS_MENSAJES['ERROR_MOSTRAR_USUARIOS']);
+        }
     }
 
     /**
@@ -23,7 +37,7 @@ class AsignarController extends Controller
      */
     public function create()
     {
-        //
+        // Implement this method if needed
     }
 
     /**
@@ -31,22 +45,54 @@ class AsignarController extends Controller
      */
     public function store(Request $request)
     {
-        // crear usuario 
-        $usuario = new User();
-        $usuario->name = $request->nombre;
-        $usuario->email = $request->email;
-        $usuario->password = bcrypt($request->password);
-        $usuario->save();
-        return redirect()->route('usuarios.index')->with('success', 'Usuario creado');
-    }
+        DB::beginTransaction();
 
+        try {
+            // Validate the request data
+            $validator = Validator::make($request->all(), [
+                'nombre' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users',
+                'password' => 'required|string|min:8',
+            ]);
+
+            if ($validator->fails()) {
+                return redirect()->route('usuarios.index')->withErrors($validator)->withInput();
+            }
+
+            // Create a new user
+            $usuario = new User();
+            $usuario->name = $request->nombre;
+            $usuario->email = $request->email;
+            $usuario->password = bcrypt($request->password);
+            $usuario->save();
+
+            // Assign the role 'user' by default
+            $usuario->roles()->sync(2); // Assuming 2 is the role ID for 'user'
+
+            // Commit the transaction
+            DB::commit();
+
+            return redirect()->route('usuarios.index')->with('success', Constants::USUARIOS_MENSAJES['USUARIO_CREADO']);
+        } catch (\Exception $e) {
+            // Rollback the transaction
+            DB::rollBack();
+
+            Log::error('Error creating user: ' . $e->getMessage());
+            return redirect()->route('usuarios.index')->with('error', Constants::GENERICOS['ERROR']);
+        }
+    }
     /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-        $usuario = User::find($id); 
-        return view('sistema.user.show', compact('usuario')); 
+        try {
+            $usuario = User::findOrFail($id);
+            return view('sistema.user.show', compact('usuario'));
+        } catch (\Exception $e) {
+            Log::error('Error fetching user: ' . $e->getMessage());
+            return redirect()->route('usuarios.index')->with('error', Constants::GENERICOS['ERROR']);
+        }
     }
 
     /**
@@ -54,9 +100,14 @@ class AsignarController extends Controller
      */
     public function edit(string $id)
     {
-        $user = User::find($id);
-        $roles = Role::all();
-        return view('sistema.user.userRol', compact('user', 'roles'));
+        try {
+            $user = User::findOrFail($id);
+            $roles = Role::all();
+            return view('sistema.user.userRol', compact('user', 'roles'));
+        } catch (\Exception $e) {
+            Log::error('Error fetching user for edit: ' . $e->getMessage());
+            return redirect()->route('usuarios.index')->with('error', Constants::GENERICOS['ERROR']);
+        }
     }
 
     /**
@@ -64,10 +115,21 @@ class AsignarController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //actualizar roles
-        $user = User::find($id);
-        $user->roles()->sync($request->roles);
-        return redirect()->route('usuarios.edit', $user)->with('success', 'Roles asignados');
+        try {
+            // Validate the request data
+            $request->validate([
+                'roles' => 'required|array',
+            ]);
+
+            // Update user roles
+            $user = User::findOrFail($id);
+            $user->roles()->sync($request->roles);
+
+            return redirect()->route('usuarios.edit', $user)->with('success', Constants::USUARIOS_MENSAJES['ROLES_ASIGNADOS']);
+        } catch (\Exception $e) {
+            Log::error('Error updating user roles: ' . $e->getMessage());
+            return redirect()->route('usuarios.edit', $id)->with('error', Constants::USUARIOS_MENSAJES['ERROR_ACTUALIZAR_ROLES']);
+        }
     }
 
     /**
@@ -75,6 +137,14 @@ class AsignarController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $user = User::findOrFail($id);
+            $user->delete();
+
+            return redirect()->route('usuarios.index')->with('success', Constants::GENERICOS['ELIMINADO']);
+        } catch (\Exception $e) {
+            Log::error('Error deleting user: ' . $e->getMessage());
+            return redirect()->route('usuarios.index')->with('error', Constants::GENERICOS['ERROR']);
+        }
     }
 }

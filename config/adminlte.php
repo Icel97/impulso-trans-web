@@ -110,7 +110,7 @@ return [
     */
 
     'preloader' => [
-        'enabled' => true,
+        'enabled' => false,
         'mode' => 'fullscreen',
         'img' => [
             'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
@@ -322,18 +322,24 @@ return [
         //     'label' => 4,
         //     'label_color' => 'success',
         // ],
-        ['header' => 'Confirguración'],
+
         [
-            'text' => 'profile',
-            'url' => 'profile',
-            'icon' => 'fas fa-fw fa-user',
+            'text' => 'Dashboard',
+            'url' => 'dashboard',
+            'icon' => 'fas fa-fw fa-chart-line',
+        ],
+        ['header' => 'Gestion'],
+        [
+            'text' => 'Asesorias',
+            'url' => 'asesorias',
+            'icon' => 'fas fa-fw fa-calendar',
         ],
         ['header' => 'Afiliación'],
-        [
-            'text' => 'Productos',
-            'url' => 'productos',
-            'icon' => 'fas fa-fw fa-share',
-        ],
+        // [
+        //     'text' => 'Productos',
+        //     'url' => 'productos',
+        //     'icon' => 'fas fa-fw fa-share',
+        // ],
         [
             'text' => 'Pagos',
             'url' => 'pagos',
@@ -359,6 +365,12 @@ return [
             'text' => 'Permisos',
             'route' => 'permisos.index',
             'icon' => 'fas fa-fw fa-key',
+        ],
+        ['header' => 'Configuración'],
+        [
+            'text' => 'profile',
+            'url' => 'profile',
+            'icon' => 'fas fa-fw fa-user',
         ],
     ],
 
@@ -415,6 +427,46 @@ return [
                     'asset' => false,
                     'location' => '//cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css',
                 ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/datatables-plugins/buttons/js/dataTables.buttons.min.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/datatables-plugins/buttons/js/buttons.bootstrap4.min.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/datatables-plugins/buttons/js/buttons.html5.min.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/datatables-plugins/buttons/js/buttons.print.min.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/datatables-plugins/jszip/jszip.min.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/datatables-plugins/pdfmake/pdfmake.min.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/datatables-plugins/pdfmake/vfs_fonts.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'vendor/datatables-plugins/buttons/css/buttons.bootstrap4.min.css',
+                ],
             ],
         ],
         'Select2' => [
@@ -464,6 +516,16 @@ return [
                     'type' => 'js',
                     'asset' => false,
                     'location' => '//cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js',
+                ],
+            ],
+        ],
+        'Tailwind' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => '//cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css',
                 ],
             ],
         ],

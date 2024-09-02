@@ -11,7 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
+<<<<<<<< HEAD:database/migrations/2024_07_27_080021_drop_tables.php
         Schema::dropIfExists('pagos_historial');
+========
+        Schema::dropIfExists('historial_pagos');
+        Schema::dropIfExists('historial__suscripcions');
+>>>>>>>> main:database/migrations/2024_07_27_3480029_drop_tables.php
     }
 
     /**
