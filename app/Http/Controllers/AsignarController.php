@@ -7,6 +7,8 @@ use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Log;
 use App\lib\Constants;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class AsignarController extends Controller
 {
@@ -43,13 +45,19 @@ class AsignarController extends Controller
      */
     public function store(Request $request)
     {
+        DB::beginTransaction();
+
         try {
             // Validate the request data
-            $request->validate([
+            $validator = Validator::make($request->all(), [
                 'nombre' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255|unique:users',
                 'password' => 'required|string|min:8',
             ]);
+
+            if ($validator->fails()) {
+                return redirect()->route('usuarios.index')->withErrors($validator)->withInput();
+            }
 
             // Create a new user
             $usuario = new User();
@@ -58,13 +66,21 @@ class AsignarController extends Controller
             $usuario->password = bcrypt($request->password);
             $usuario->save();
 
+            // Assign the role 'user' by default
+            $usuario->roles()->sync(2); // Assuming 2 is the role ID for 'user'
+
+            // Commit the transaction
+            DB::commit();
+
             return redirect()->route('usuarios.index')->with('success', Constants::USUARIOS_MENSAJES['USUARIO_CREADO']);
         } catch (\Exception $e) {
+            // Rollback the transaction
+            DB::rollBack();
+
             Log::error('Error creating user: ' . $e->getMessage());
             return redirect()->route('usuarios.index')->with('error', Constants::GENERICOS['ERROR']);
         }
     }
-
     /**
      * Display the specified resource.
      */

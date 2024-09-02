@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::dropIfExists('pagos');
+        Schema::dropIfExists('historial_pagos');
+        Schema::dropIfExists('historial__suscripcions');
     }
 
     /**

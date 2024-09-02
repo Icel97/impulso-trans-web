@@ -70,7 +70,7 @@
                     ];
                 @endphp
 
-                <x-adminlte-datatable :heads="$heads" :config="$config">
+                <x-adminlte-datatable id="table-productos" :heads="$heads" :config="$config">
                     @foreach ($productos as $producto)
                         <tr>
                             <td>{{ $producto->id }}</td>

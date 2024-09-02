@@ -68,7 +68,7 @@
                         {{ session('error') }}
                     </x-adminlte-alert>
                 @elseif (session('info'))
-                    <x-adminlte-alert theme="info" title="Alerta" id="info-alert">
+                    <x-adminlte-alert theme="info" title="Info" id="info-alert">
                         {{ session('info') }}
                     </x-adminlte-alert>
                 @endif
@@ -149,6 +149,9 @@
                             </tr>
                         @endforeach
                     </x-adminlte-datatable>
+                @else
+                    <p class="text-muted">Aún no hay registros</p>
+
                 @endif
             </div>
         </div>
@@ -180,6 +183,7 @@
             setTimeout(function() {
                 $('#success-alert').fadeOut('slow');
                 $('#error-alert').fadeOut('slow');
+                $('#info-alert').fadeOut('slow');
             }, 5000);
 
             $('.formValidar').submit(function(e) {

@@ -366,7 +366,7 @@ return [
             'route' => 'permisos.index',
             'icon' => 'fas fa-fw fa-key',
         ],
-        ['header' => 'Confirguración'],
+        ['header' => 'Configuración'],
         [
             'text' => 'profile',
             'url' => 'profile',

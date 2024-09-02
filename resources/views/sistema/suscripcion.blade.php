@@ -42,16 +42,16 @@
                             href="{{ route('suscripciones.index', ['filter' => 'all']) }}">Todos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ $filter === 'inactive' ? 'inactive' : '' }}"
-                            href="{{ route('suscripciones.index', ['filter' => 'review']) }}">Inactivos</a>
+                        <a class="nav-link {{ $filter === 'inactive' ? 'active' : '' }}"
+                            href="{{ route('suscripciones.index', ['filter' => 'inactive']) }}">Inactivos</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ $filter === 'active' ? 'active' : '' }}"
                             href="{{ route('suscripciones.index', ['filter' => 'active']) }}">Activos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ $filter === 'expired' ? 'expired' : '' }}"
-                            href="{{ route('suscripciones.index', ['filter' => 'approved']) }}">Vencidos</a>
+                        <a class="nav-link {{ $filter === 'expired' ? 'active' : '' }}"
+                            href="{{ route('suscripciones.index', ['filter' => 'expired']) }}">Vencidos</a>
                     </li>
                 </ul>
 
@@ -138,6 +138,9 @@
                             </tr>
                         @endforeach
                     </x-adminlte-datatable>
+                @else
+                    <p class="text-muted">Aún no hay registros</p>
+
                 @endif
             </div>
         </div>

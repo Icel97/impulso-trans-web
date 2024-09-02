@@ -133,6 +133,9 @@
                             </tr>
                         @endforeach
                     </x-adminlte-datatable>
+                @else
+                    <p class="text-muted">Aún no hay registros</p>
+
                 @endif
             </div>
         </div>
@@ -267,6 +270,7 @@
             setTimeout(function() {
                 $('#success-alert').fadeOut('slow');
                 $('#error-alert').fadeOut('slow');
+                $('#info-alert').fadeOut('slow');
             }, 5000);
 
             $('.formValidar').submit(function(e) {
