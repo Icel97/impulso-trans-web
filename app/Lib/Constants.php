@@ -36,4 +36,10 @@ class Constants
         "ARCHIVO_NO_ENCONTRADO" => "Archivo no encontrado",
         "ELIMINADO" => "Eliminado correctamente",
     ];
+
+    const PERMISOS = [
+        "PERMISO_ELIMINADO" => "Permiso eliminado",
+        "PERMISO_ACTUALIZADO" => "Permiso actualizado",
+        "PERMISO_CREADO" => "Permiso creado",
+    ];
 }

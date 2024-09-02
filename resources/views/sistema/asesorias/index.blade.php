@@ -217,7 +217,7 @@
                         </div>
                         <div class="row mx-n2">
                             <div class="col-md-6 mb-4 px-2">
-                                <p class="font-weight-bold text-primary">Cancelaciones</p>
+                                <p class="font-weight-bold text-primary">Cancelaciones (consecutivas)</p>
                                 <div class="bg-light rounded w-100 mr-2">
                                     <p id="canceladas" class="card-text">-</p>
                                 </div>
@@ -333,7 +333,9 @@
                             .val(data.notas ?? '-');
                         $('#submit-button').prop('disabled',
                             false);
-                        $('#canceladas').text(data.user.cancelacion.total ?? '-');
+                        $('#canceladas').text(data.user.cancelacion && data.user.cancelacion
+                            .total !== null && data.user.cancelacion.total !== undefined ?
+                            data.user.cancelacion.total : '-');
                     },
                     error: function(data) {
                         console.error(data);
@@ -372,7 +374,7 @@
                         $('#success-alert2').show();
                         $('#loading').css('display', 'flex');
                         $('#content').hide();
-                        // location.reload();
+                        location.reload();
 
                     },
                     error: function(data) {
@@ -383,7 +385,7 @@
                         $('#error-alert2').show();
                         $('#loading').css('display', 'flex');
                         $('#content').hide();
-                        // location.reload();
+                        location.reload();
                     },
                 });
             });
