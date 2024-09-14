@@ -63,11 +63,7 @@ return [
     |
     */
 
-<<<<<<< .merge_file_sYObGO
     'logo' => '<b>Impulso</b>Trans',
-=======
-    'logo' => '<b>Admin</b>LTE',
->>>>>>> .merge_file_qITH1u
     'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
@@ -298,11 +294,7 @@ return [
     */
 
     'menu' => [
-<<<<<<< .merge_file_sYObGO
         // Navbar items:
-=======
-        // menu superior:
->>>>>>> .merge_file_qITH1u
         // [
         //     'type' => 'navbar-search',
         //     'text' => 'search',
@@ -313,11 +305,7 @@ return [
             'topnav_right' => true,
         ],
 
-<<<<<<< .merge_file_sYObGO
         // Sidebar items:
-=======
-        // Menu lateral:
->>>>>>> .merge_file_qITH1u
         // [
         //     'type' => 'sidebar-menu-search',
         //     'text' => 'search',
@@ -334,7 +322,6 @@ return [
         //     'label' => 4,
         //     'label_color' => 'success',
         // ],
-<<<<<<< .merge_file_sYObGO
 
         [
             'text' => 'Dashboard',
@@ -402,72 +389,6 @@ return [
             'text' => 'profile',
             'url' => 'profile',
             'icon' => 'fas fa-fw fa-user',
-=======
-        ['header' => 'account_settings'],
-        [
-            'text' => 'profile',
-            'url' => 'perfil',
-            'icon' => 'fas fa-fw fa-user',
-        ],
-        [
-            'text' => 'change_password',
-            'url' => 'admin/settings',
-            'icon' => 'fas fa-fw fa-lock',
-        ],
-        [
-            'text' => 'multilevel',
-            'icon' => 'fas fa-fw fa-share',
-            'submenu' => [
-                [
-                    'text' => 'level_one',
-                    'url' => '#',
-                ],
-                [
-                    'text' => 'level_one',
-                    'url' => '#',
-                    'submenu' => [
-                        [
-                            'text' => 'level_two',
-                            'url' => '#',
-                        ],
-                        [
-                            'text' => 'level_two',
-                            'url' => '#',
-                            'submenu' => [
-                                [
-                                    'text' => 'level_three',
-                                    'url' => '#',
-                                ],
-                                [
-                                    'text' => 'level_three',
-                                    'url' => '#',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-                [
-                    'text' => 'level_one',
-                    'url' => '#',
-                ],
-            ],
-        ],
-        ['header' => 'labels'],
-        [
-            'text' => 'important',
-            'icon_color' => 'red',
-            'url' => '#',
-        ],
-        [
-            'text' => 'warning',
-            'icon_color' => 'yellow',
-            'url' => '#',
-        ],
-        [
-            'text' => 'information',
-            'icon_color' => 'cyan',
-            'url' => '#',
->>>>>>> .merge_file_qITH1u
         ],
     ],
 
@@ -507,7 +428,6 @@ return [
 
     'plugins' => [
         'Datatables' => [
-<<<<<<< .merge_file_sYObGO
             'active' => true,
             'files' => [
                 [
@@ -524,24 +444,6 @@ return [
                     'type' => 'css',
                     'asset' => true,
                     'location' => 'vendor/datatables/css/dataTables.bootstrap4.min.css',
-=======
-            'active' => false,
-            'files' => [
-                [
-                    'type' => 'js',
-                    'asset' => false,
-                    'location' => '//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js',
-                ],
-                [
-                    'type' => 'js',
-                    'asset' => false,
-                    'location' => '//cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js',
-                ],
-                [
-                    'type' => 'css',
-                    'asset' => false,
-                    'location' => '//cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css',
->>>>>>> .merge_file_qITH1u
                 ],
             ],
         ],
@@ -571,20 +473,12 @@ return [
             ],
         ],
         'Sweetalert2' => [
-<<<<<<< .merge_file_sYObGO
             'active' => true,
-=======
-            'active' => false,
->>>>>>> .merge_file_qITH1u
             'files' => [
                 [
                     'type' => 'js',
                     'asset' => false,
-<<<<<<< .merge_file_sYObGO
                     'location' => '//cdn.jsdelivr.net/npm/sweetalert2@11',
-=======
-                    'location' => '//cdn.jsdelivr.net/npm/sweetalert2@8',
->>>>>>> .merge_file_qITH1u
                 ],
             ],
         ],
@@ -603,7 +497,6 @@ return [
                 ],
             ],
         ],
-<<<<<<< .merge_file_sYObGO
         'Tailwind' => [
             'active' => false,
             'files' => [
@@ -614,8 +507,6 @@ return [
                 ],
             ],
         ],
-=======
->>>>>>> .merge_file_qITH1u
     ],
 
     /*
@@ -663,9 +554,5 @@ return [
     |
     */
 
-<<<<<<< .merge_file_sYObGO
     'livewire' => true,
-=======
-    'livewire' => false,
->>>>>>> .merge_file_qITH1u
 ];

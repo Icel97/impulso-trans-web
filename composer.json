@@ -7,23 +7,16 @@
     "require": {
         "php": "^8.1",
         "guzzlehttp/guzzle": "^7.2",
-<<<<<<< .merge_file_bT1aXV
         "jeroennoten/laravel-adminlte": "^3.12",
-=======
-        "jeroennoten/laravel-adminlte": "^3.11",
->>>>>>> .merge_file_uT0ZjJ
         "laravel/framework": "^10.10",
         "laravel/jetstream": "^4.3",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
-<<<<<<< .merge_file_bT1aXV
         "laravelcollective/html": "^6.4",
         "livewire/livewire": "^3.0",
-        "spatie/laravel-permission": "^6.9"
-=======
+        "spatie/laravel-permission": "^6.9",
         "laravel/ui": "^4.5",
         "realrashid/sweet-alert": "^7.0"
->>>>>>> .merge_file_uT0ZjJ
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
