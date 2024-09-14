@@ -15,16 +15,6 @@ use App\Models\WebsiteText;
 use App\Models\PointOfInterest;
 
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
 
 Route::get('/', function () {
     //pasar los textos de los programas
@@ -79,3 +69,10 @@ Route::middleware([
         Route::resource('/puntos', MapaController::class)->names('puntos');
     });
 });
+
+Auth::routes();
+
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+//llamamos a la vista perfil
+Route::get('/perfil', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
