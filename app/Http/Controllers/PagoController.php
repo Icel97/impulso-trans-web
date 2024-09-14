@@ -148,10 +148,9 @@ class PagoController extends Controller
             $filePath = storage_path('app/public/pagos/' . date('Y') . '/' . $pago->comprobante_url);
 
             if (!Storage::disk('public')->exists('pagos/' . date('Y') . '/' . $pago->comprobante_url)) {
-                $req->session()->flash('error', Constants::GENERICOS["ERROR"]);
-
+                $req->session()->flash('error', Constants::GENERICOS["PAGO_NO_ENCONTRADO"]);
                 $pagos = Pago::whereNot('validado', 'Pendiente')->orderBy('created_at', 'desc')->get();
-                return view("sistema.pago", ['error' => Constants::GENERICOS["ERROR"], 'pagos' => $pagos, 'filter' => 'all']);
+                return view("sistema.pago", ['error' => Constants::GENERICOS["PAGO_NO_ENCONTRADO"], 'pagos' => $pagos, 'filter' => 'all']);
             }
 
             return response()->file($filePath);

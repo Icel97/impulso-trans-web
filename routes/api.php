@@ -30,7 +30,6 @@ Route::post('/pagos', [PagoController::class, 'createPago']);
 
 Route::post("/asesorias", [AsesoriaController::class, 'create']);
 Route::get("/asesorias/{id}", [AsesoriaController::class, 'show']);
-Route::post("/asesorias/update", [AsesoriaController::class, 'actualizar'])->name('asesorias.actualizar');
 
 
 Route::get("/metricas/afiliaciones", [MetricasController::class, 'afiliaciones'])->name('metricas.afiliaciones');
@@ -48,5 +47,5 @@ Route::post('/webhook/calendly', [CalendlyWebhookController::class, 'handleWebho
 Route::get('/webhook/calendly/test', [CalendlyWebhookController::class, 'testInsert']);
 
 // login and register
-Route::post('/register', [UserController::class, 'register']);
+// Route::post('/register', [UserController::class, 'register']);
 Route::post('/login', [UserController::class, 'login']);

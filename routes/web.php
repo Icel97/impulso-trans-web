@@ -59,13 +59,15 @@ Route::middleware([
         Route::post('/suscripciones/actualizar', [SuscripcionController::class, 'actualizarSuscripcion'])->name("suscripciones.actualizarSuscripcion");
 
         Route::get('/pagos', [PagoController::class, 'index'])->name('pagos.index');
-        Route::get('/pagos/comprobante/{id}', [PagoController::class, 'displayPhoto'])->middleware(['role:Administrador'])->name("pagos.displayPhoto");
+        Route::get('/pagos/comprobante/{id}', [PagoController::class, 'displayPhoto'])->name("pagos.displayPhoto");
         Route::post('/pagos/validar', [PagoController::class, 'validarPago'])->name('pagos.validarPago');
 
         Route::get('/suscripciones', [SuscripcionController::class, 'index'])->name("suscripciones.index");
         Route::post('/suscripciones/actualizar', [SuscripcionController::class, 'actualizarSuscripcion'])->name("suscripciones.actualizarSuscripcion");
 
         Route::get('/asesorias', [AsesoriaController::class, 'index'])->name('asesorias.index');
+        Route::post("/asesorias/update", [AsesoriaController::class, 'actualizar'])->name('asesorias.actualizar');
+
 
         Route::resource('/usuarios', AsignarController::class)->names('usuarios');
 

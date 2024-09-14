@@ -22,17 +22,19 @@ class AsesoriaController extends Controller
 
         switch ($filter) {
             case 'pendientes':
-                $asesorias = Asesoria::where('status', AsesoriasStatusEnum::PENDIENTE)->with('user')->get();
+                $asesorias = Asesoria::where('estatus', AsesoriasStatusEnum::PENDIENTE)->with('user')->get();
                 break;
-            case 'confirmadas':
-                $asesorias = Asesoria::where('status', AsesoriasStatusEnum::FINALIZADA)->with('user')->get();
+            case 'finalizadas':
+                $asesorias = Asesoria::where('estatus', AsesoriasStatusEnum::FINALIZADA)->with('user')->get();
+                break;
+            case 'canceladas':
+                $asesorias = Asesoria::where('estatus', AsesoriasStatusEnum::CANCELADA)->with('user')->get();
                 break;
             default:
                 $asesorias = Asesoria::with('user')->get();
                 break;
         }
 
-        $asesorias = Asesoria::all();
         $estatus = AsesoriasStatusEnum::toArray();
         return view('sistema.asesorias.index', compact('asesorias', 'filter', 'estatus'));
     }
@@ -44,6 +46,7 @@ class AsesoriaController extends Controller
                 'id_user' => 'required|exists:users,id',
                 'motivo' => 'required|in:' . implode(',', AsesoriasMotivoEnum::toArray()),
                 'id_estado_nacimiento' => 'required|exists:estados,id',
+                'fecha_cita' => 'required|date',
             ]);
 
             if ($validator->fails()) {
@@ -55,6 +58,7 @@ class AsesoriaController extends Controller
             $asesoria->id_user = $req->id_user;
             $asesoria->motivo = $req->motivo;
             $asesoria->id_estado_nacimiento = $req->id_estado_nacimiento;
+            $asesoria->fecha_cita = $req->fecha_cita;
             $asesoria->estatus = AsesoriasStatusEnum::PENDIENTE;
             $asesoria->save();
 
@@ -80,50 +84,38 @@ class AsesoriaController extends Controller
     public function actualizar(Request $req)
     {
         try {
-
+            // Validate form input
             $validator = Validator::make($req->all(), [
                 'estatus' => 'required|in:' . implode(',', AsesoriasStatusEnum::toArray()),
                 'notas' => 'nullable|string',
+                'id' => 'required|exists:asesorias,id',
             ]);
 
-
             if ($validator->fails()) {
-                return response()->json(['errord' => $validator->errors()], 400);
+                Log::error('form malo: ' . $validator->errors());
+                return redirect()->route('asesorias.index')
+                    ->withErrors($validator)
+                    ->withInput()
+                    ->with('modal_open', true)  // Indicate that modal should be open
+                    ->with('asesoria_id', $req->id);  // Pass asesoria ID to session
             }
 
-
-            $id = $req->id;
-            $estatus = $req->estatus;
-            $notas = $req->notas;
-            $asesoria = Asesoria::find($id);
+            $asesoria = Asesoria::find($req->id);
             if ($asesoria) {
-                $user_id = $asesoria->id_user;
-                // If the asesoria is being cancelled, we need to update the cancelaciones table
-                if ($asesoria->estatus != AsesoriasStatusEnum::CANCELADA->value && $estatus == AsesoriasStatusEnum::CANCELADA->value) {
-                    $canceladaCount = Cancelaciones::firstOrCreate(['id_user' => $user_id]);
-                    $canceladaCount->total += 1;
-                    $canceladaCount->save();
-                }
-                // If the asesoria is being updated to a different status, we need to update the cancelaciones table
-                else if ($asesoria->estatus == AsesoriasStatusEnum::CANCELADA->value && $estatus != AsesoriasStatusEnum::CANCELADA->value) {
-                    $canceladaCount = Cancelaciones::firstOrCreate(['id_user' => $user_id]);
-                    $canceladaCount->total = 0;
-                    $canceladaCount->save();
-                }
-
-                if ($estatus == AsesoriasStatusEnum::CANCELADA->value || $estatus == AsesoriasStatusEnum::FINALIZADA->value) {
-                    $asesoria->fecha_cita = new \DateTime();
-                }
-                $asesoria->estatus = $estatus;
-                $asesoria->notas = $notas;
+                $asesoria->estatus = $req->estatus;
+                $asesoria->notas = $req->notas;
                 $asesoria->save();
-                return response()->json(['message' => 'Asesoria actualizada correctamente'], 200);
+
+                return redirect()->route('asesorias.index')
+                    ->with('success', 'Asesoria actualizada correctamente');
             } else {
-                return redirect()->route('asesorias.index')->with('error', 'Asesoria no encontrada');
+                return redirect()->route('asesorias.index')
+                    ->with('error', 'Asesoria no encontrada');
             }
         } catch (\Exception $e) {
             Log::error('Error updating asesoria: ' . $e->getMessage());
-            return response()->json(['error' => Constants::GENERICOS['ERROR']], 500);
+            return redirect()->back()
+                ->with('error', 'Hubo un error actualizando la asesoría.');
         }
     }
 }

@@ -16,6 +16,7 @@ class SuscripcionController extends Controller
 {
     public function index(Request $request)
     {
+
         try {
             $id = $request->query('id', null);
 

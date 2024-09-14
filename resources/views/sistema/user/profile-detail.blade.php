@@ -54,18 +54,19 @@
             </div>
             <div class="col-md-6 col-sm-12">
                 <p class="font-weight-bold">Neurodivergencia</p>
-                <p class="card-text">{{ $usuario->neurodivergencia ?? '-' }}</p>
+                {{ isset($usuario->neurodivergencia) && $usuario->neurodivergencia ? 'Sí' : '-' }}
+                </p>
             </div>
         </div>
         <div class="row w-100 px-4" style="margin-block: 2rem;">
 
             <div class="col-md-6 col-sm-12">
                 <p class="font-weight-bold">Indígena</p>
-                <p class="card-text">{{ $usuario->indigena ?? '-' }}</p>
+                {{ isset($usuario->indigena) && $usuario->indigena ? 'Sí' : '-' }}
             </div>
             <div class="col-md-6 col-sm-12">
                 <p class="font-weight-bold">Afrodescendiente</p>
-                <p class="card-text">{{ $usuario->afrodescendiente ?? '-' }}</p>
+                {{ isset($usuario->afrodescendiente) && $usuario->afrodescendiente ? 'Sí' : '-' }}
             </div>
         </div>
     </div>
