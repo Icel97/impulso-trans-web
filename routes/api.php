@@ -7,7 +7,8 @@ use App\Http\Controllers\PagoController;
 use App\Http\Controllers\MetricasController;
 use App\Http\Controllers\Api\CalendlyWebhookController;
 use App\Http\Controllers\Api\UserController;
-
+use App\Http\Controllers\EstadoController;
+use App\Http\Controllers\MunicipioController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,5 +48,11 @@ Route::post('/webhook/calendly', [CalendlyWebhookController::class, 'handleWebho
 Route::get('/webhook/calendly/test', [CalendlyWebhookController::class, 'testInsert']);
 
 // login and register
-// Route::post('/register', [UserController::class, 'register']);
+Route::post('/register', [UserController::class, 'register']);
 Route::post('/login', [UserController::class, 'login']);
+Route::put('/user/{id}', [UserController::class, 'updateUser']);
+
+// Estados
+Route::resource('estados', EstadoController::class);
+Route::get('municipios', [MunicipioController::class, 'index']);
+Route::get('municipios/estado/{estado_id}', [MunicipioController::class, 'getByEstado']);
